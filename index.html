@@ -645,10 +645,9 @@ const iqBody = document.getElementById('iq-body');
 IQ.forEach((q) => {
   const d = document.createElement('div');
   d.className = 'q-wrap';
-  const labels = ['A','B','C','D'];
   d.innerHTML = `<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
-  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi})">
-    <div class="opt-l">${labels[oi]}</div><div class="opt-t urdu">${o}</div></div>`).join('')}</div>`;
+  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi},${o.s})">
+    <div class="opt-l">${o.l}</div><div class="opt-t urdu">${o.t}</div></div>`).join('')}</div>`;
   iqBody.appendChild(d);
 });
 
@@ -661,29 +660,28 @@ function selOpt(qn,oi,score){
   answers.sjt[qn]=score;
 }
 
-function selIQ(qn,oi){
+function selIQ(qn,oi,score){
   const q = IQ.find(x=>x.n===qn);
+  const isCorrect = score === 4;
+  // Reset all options
   q.opts.forEach((_,j)=>{
     const el = document.getElementById(`iq_${qn}_${j}`);
-    if(el){
-      el.classList.remove('sel');
-      el.style.background='';
-      el.style.borderColor='';
-    }
+    if(el){ el.classList.remove('sel'); el.style.background=''; el.style.borderColor=''; }
   });
+  // Highlight chosen
   const chosen = document.getElementById(`iq_${qn}_${oi}`);
   if(chosen){
-    const isCorrect = oi === q.correct;
     chosen.classList.add('sel');
     chosen.style.background = isCorrect ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.06)';
     chosen.style.borderColor = isCorrect ? 'var(--emerald)' : 'var(--rd)';
-    // Show correct answer if wrong
-    if(!isCorrect){
-      const correctEl = document.getElementById(`iq_${qn}_${q.correct}`);
-      if(correctEl){ correctEl.style.borderColor='var(--emerald)'; correctEl.style.background='rgba(5,150,105,0.06)'; }
-    }
   }
-  answers.iq[qn] = oi === q.correct ? 4 : 0;
+  // Show correct answer if wrong
+  if(!isCorrect){
+    const correctIdx = q.opts.findIndex(o=>o.s===4);
+    const correctEl = document.getElementById(`iq_${qn}_${correctIdx}`);
+    if(correctEl){ correctEl.style.borderColor='var(--emerald)'; correctEl.style.background='rgba(5,150,105,0.06)'; }
+  }
+  answers.iq[qn] = score;
 }
 
 function selSE(qi,oi,score){
