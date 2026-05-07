@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Shibli Trust — Assessment Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --navy:#0f172a;--navy-800:#1e293b;--navy-700:#334155;
+  --emerald:#059669;--emerald-600:#047857;--emerald-400:#34d399;
+  --emerald-100:#d1fae5;--emerald-50:#ecfdf5;
+  --gold:#d97706;--gold-light:#fef3c7;
+  --sapphire:#1d4ed8;--sapphire-light:#dbeafe;
+  --violet:#7c3aed;--violet-light:#ede9fe;
+  --rd:#dc2626;--rl:#fee2e2;
+  --g:var(--emerald);--gd:var(--emerald-600);--gm:var(--emerald-600);
+  --gl:var(--emerald-100);--gg:#6ee7b7;
+  --am:var(--gold);--al:var(--gold-light);
+  --bl:var(--sapphire);--bll:var(--sapphire-light);
+  --pu:var(--violet);--pul:var(--violet-light);
+  --t0:#fff;--t50:#f8fafc;--t100:#f1f5f9;--t200:#e2e8f0;
+  --t300:#cbd5e1;--t400:#64748b;--t500:#475569;
+  --t600:#334155;--t700:#1e293b;--t800:#1e293b;--t900:#0f172a;
+  --font:'Plus Jakarta Sans',system-ui,sans-serif;
+  --r:14px;--r-sm:8px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--font);
+  background:#f0f4f8;
+  color:var(--navy-800);
+  min-height:100vh;
+}
+
+/* HEADER */
+.hdr{
+  background:var(--navy);
+  color:#fff;padding:0 20px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(15,23,42,0.4);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.hdr-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:38px;height:38px;background:linear-gradient(135deg,var(--emerald),var(--emerald-400));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 3px 10px rgba(5,150,105,0.4);flex-shrink:0}
+.hdr-title{font-size:15px;font-weight:800;color:#fff;letter-spacing:-0.02em}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px}
+.hdr-actions{display:flex;gap:8px;align-items:center}
+.hdr-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap}
+.hdr-btn-ghost{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15)}
+.hdr-btn-ghost:hover{background:rgba(255,255,255,0.18)}
+.hdr-btn-mgmt{background:linear-gradient(135deg,#5b21b6,var(--violet));color:#fff;box-shadow:0 2px 8px rgba(124,58,237,0.4)}
+
+/* PIN GATE */
+.gate-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);padding:24px;background:linear-gradient(135deg,#f0fdf4,#eff6ff)}
+.gate-card{background:#fff;border-radius:20px;box-shadow:0 8px 40px rgba(15,23,42,0.12);padding:48px 36px;text-align:center;max-width:360px;width:100%;border:1px solid var(--t200)}
+.gate-emblem{width:76px;height:76px;background:linear-gradient(135deg,var(--navy),var(--navy-700));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 20px;box-shadow:0 6px 20px rgba(15,23,42,0.3)}
+.gate-card h2{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px;letter-spacing:-0.03em}
+.gate-card p{font-size:14px;color:var(--t400);line-height:1.7;margin-bottom:28px}
+.pin-label{font-size:10px;font-weight:800;color:var(--t400);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:10px}
+.pin-inp{width:160px;text-align:center;font-size:36px;letter-spacing:.5em;font-weight:900;padding:14px;border:2px solid var(--t200);border-radius:12px;font-family:var(--font);color:var(--navy);background:var(--t50);transition:all .2s;outline:none}
+.pin-inp:focus{border-color:var(--emerald);background:#fff;box-shadow:0 0 0 4px rgba(5,150,105,0.12)}
+.pin-err{color:var(--rd);font-size:13px;margin-top:12px;font-weight:700;display:none}
+
+/* WRAP */
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 130px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.stat-card{background:#fff;border-radius:12px;padding:16px 12px;box-shadow:0 1px 4px rgba(15,23,42,0.08);text-align:center;border:1px solid var(--t200);transition:all .2s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(15,23,42,0.1)}
+.stat-num{font-size:28px;font-weight:900;line-height:1;color:var(--navy);letter-spacing:-0.03em}
+.stat-lbl{font-size:10px;font-weight:700;color:var(--t400);text-transform:uppercase;letter-spacing:0.07em;margin-top:5px}
+.stat-card.green .stat-num{color:var(--emerald)}
+.stat-card.purple .stat-num{color:var(--violet)}
+.stat-card.gold .stat-num{color:var(--gold)}
+.stat-card.blue .stat-num{color:var(--sapphire)}
+
+/* PROGRESS */
+.prog-card{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(15,23,42,0.08);margin-bottom:14px;border:1px solid var(--t200)}
+.prog-title{font-size:13px;font-weight:700;color:var(--navy-700);margin-bottom:6px;display:flex;justify-content:space-between}
+.prog-bar{height:8px;background:var(--t100);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--emerald),var(--emerald-400));border-radius:4px;transition:width .5s ease;box-shadow:0 0 6px rgba(5,150,105,0.3)}
+.prog-info{flex:1}
+
+/* CONTROLS */
+.controls{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search-box{flex:1;min-width:200px;display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--t200);border-radius:10px;padding:10px 14px;transition:all .2s;box-shadow:0 1px 4px rgba(15,23,42,0.06)}
+.search-box:focus-within{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
+.search-box input{flex:1;border:none;outline:none;font-size:14px;font-family:var(--font);color:var(--navy-800);background:transparent}
+.ctrl-sel{border:1.5px solid var(--t200);border-radius:10px;padding:10px 14px;font-size:13px;font-family:var(--font);background:#fff;color:var(--navy-700);cursor:pointer;outline:none;box-shadow:0 1px 4px rgba(15,23,42,0.06)}
+
+/* STUDENT CARDS */
+.student-card{background:#fff;border-radius:var(--r);box-shadow:0 1px 4px rgba(15,23,42,0.08);margin-bottom:10px;overflow:hidden;border:1.5px solid var(--t200);transition:all .2s}
+.student-card.scored{border-color:rgba(5,150,105,0.4)}
+.student-card.open{box-shadow:0 4px 20px rgba(15,23,42,0.12)}
+.student-card:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(15,23,42,0.1)}
+.card-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .1s}
+.card-header:active{background:var(--t50)}
+.rank-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0}
+.rk-1{background:#fef3c7;color:#92400e}.rk-2{background:#f1f5f9;color:#334155}.rk-3{background:#fce7f3;color:#9d174d}.rk-n{background:var(--t100);color:var(--t500)}
+.card-info{flex:1;min-width:0}
+.card-name{font-size:15px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.02em}
+.card-meta{font-size:12px;color:var(--t400);margin-top:2px}
+.card-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.score-badge{display:flex;flex-direction:column;align-items:center}
+.score-big{font-size:22px;font-weight:900;line-height:1;letter-spacing:-0.03em}
+.score-max{font-size:10px;color:var(--t400);font-weight:700}
+
+/* STATUS PILLS */
+.band-pill{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;border:1px solid transparent}
+.band-excellent{background:var(--emerald-50);color:var(--emerald-600);border-color:rgba(5,150,105,0.25)}
+.band-recommended{background:var(--sapphire-light);color:var(--sapphire);border-color:rgba(29,78,216,0.25)}
+.band-borderline{background:var(--gold-light);color:#92400e;border-color:rgba(217,119,6,0.25)}
+.band-low{background:var(--rl);color:var(--rd);border-color:rgba(220,38,38,0.25)}
+.band-pending{background:var(--t100);color:var(--t500);border-color:var(--t300)}
+.tap-score{background:linear-gradient(135deg,var(--emerald),#10b981);color:#fff;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(5,150,105,0.3)}
+.chevron{color:var(--t300);font-size:18px;transition:transform .25s;flex-shrink:0}
+.chevron.open{transform:rotate(180deg);color:var(--emerald)}
+
+/* SCORING PANEL */
+.scoring-panel{display:none;border-top:1px solid var(--t200)}
+.scoring-panel.open{display:block}
+.panel-wrap{padding:20px;background:var(--t50)}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* SCORE SECTIONS */
+.score-section{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--t200);box-shadow:0 1px 4px rgba(15,23,42,0.06)}
+.score-section.full{grid-column:1/-1}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{display:flex;align-items:center;gap:8px}
+.sec-icon{font-size:18px}
+.sec-name{font-size:13px;font-weight:800;color:var(--navy);letter-spacing:-0.01em}
+.sec-max{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:800;background:var(--t100);color:var(--t500);border:1px solid var(--t200)}
+
+/* SCORE DOTS 1-7 */
+.score-track{display:flex;gap:4px}
+.score-dot{flex:1;height:38px;border-radius:8px;background:var(--t100);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--t400);transition:all .15s;border:1.5px solid transparent;user-select:none}
+.score-dot:hover{background:var(--emerald-50);color:var(--emerald);border-color:rgba(5,150,105,0.2)}
+.score-dot.active-1,.score-dot.active-2{background:#fef2f2;color:#dc2626;border-color:rgba(220,38,38,0.35)}
+.score-dot.active-3{background:#fff7ed;color:#ea580c;border-color:rgba(234,88,12,0.35)}
+.score-dot.active-4{background:#fefce8;color:#ca8a04;border-color:rgba(202,138,4,0.35)}
+.score-dot.active-5{background:var(--emerald-50);color:var(--emerald);border-color:rgba(5,150,105,0.35)}
+.score-dot.active-6{background:var(--emerald-100);color:var(--emerald-600);border-color:rgba(4,120,87,0.35)}
+.score-dot.active-7{background:linear-gradient(135deg,var(--emerald),#10b981);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(5,150,105,0.35)}
+.score-meaning{font-size:10px;text-align:center;color:var(--t500);font-weight:700;min-height:16px;margin-top:5px;text-transform:uppercase;letter-spacing:0.04em}
+
+/* ESSAYS */
+.essay-block{background:var(--t50);border-radius:8px;border:1px solid var(--t200);padding:12px;margin-bottom:8px}
+.essay-q{font-size:10px;font-weight:800;color:var(--t500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.essay-text{font-size:13px;color:var(--navy-700);line-height:1.7;max-height:80px;overflow-y:auto;background:#fff;padding:8px 10px;border-radius:6px;white-space:pre-wrap;border:1px solid var(--t200)}
+
+/* OBS */
+.obs-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--t50);border-radius:8px;border:1.5px solid var(--t200);margin-bottom:6px;cursor:pointer;transition:all .2s;user-select:none}
+.obs-item.on{border-color:rgba(5,150,105,0.4);background:var(--emerald-50)}
+.obs-text{flex:1;font-size:12px;color:var(--navy-700);line-height:1.5;font-weight:500}
+.obs-pts{font-size:11px;font-weight:700;background:var(--t200);color:var(--t600);padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+.toggle{position:relative;width:44px;height:24px;display:block;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;background:var(--t300);border-radius:12px;transition:.25s}
+.toggle input:checked+.tog-track{background:var(--emerald)}
+.tog-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.25s;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.toggle input:checked~.tog-thumb{transform:translateX(20px)}
+
+/* VOLUNTEER INPUTS */
+.vol-comment{width:100%;border:1.5px solid var(--t200);border-radius:8px;padding:10px 12px;font-size:13px;font-family:var(--font);color:var(--navy-800);background:#fff;resize:vertical;min-height:80px;line-height:1.7;transition:all .2s;outline:none}
+.vol-comment:focus{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
+.rec-options{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.rec-opt{padding:10px 8px;border-radius:8px;border:1.5px solid var(--t200);cursor:pointer;text-align:center;font-size:11px;font-weight:800;color:var(--t500);transition:all .15s;background:#fff;user-select:none}
+.rec-opt:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(15,23,42,0.08)}
+.rec-opt.sel-sr{border-color:var(--emerald);background:var(--emerald-50);color:var(--emerald-600)}
+.rec-opt.sel-r{border-color:var(--sapphire);background:var(--sapphire-light);color:var(--sapphire)}
+.rec-opt.sel-b{border-color:var(--gold);background:var(--gold-light);color:#92400e}
+.rec-opt.sel-nr{border-color:var(--rd);background:var(--rl);color:var(--rd)}
+
+/* ACADEMIC */
+.acad-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:700;color:var(--t500);text-transform:uppercase;letter-spacing:0.05em}
+.field input{border:1.5px solid var(--t200);border-radius:8px;padding:10px 12px;font-size:16px;font-family:var(--font);color:var(--navy);background:#fff;transition:all .2s;outline:none}
+.field input:focus{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
+.acad-result{background:var(--emerald-50);border-radius:8px;padding:10px;font-size:14px;font-weight:800;color:var(--emerald-600);text-align:center;border:1px solid rgba(5,150,105,0.2)}
+
+/* AI */
+.ai-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:linear-gradient(135deg,#5b21b6,var(--violet));color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font);box-shadow:0 3px 10px rgba(124,58,237,0.35);transition:all .15s}
+.ai-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(124,58,237,0.45)}
+.ai-btn:disabled{background:#a78bfa;box-shadow:none;transform:none;cursor:not-allowed}
+.ai-result{display:none;background:var(--violet-light);border:1px solid #c4b5fd;border-radius:10px;padding:14px;font-size:13px;color:#4c1d95;line-height:1.8;margin-top:10px}
+
+/* SCORE SUMMARY */
+.score-summary-bar{background:var(--navy);color:#fff;border-radius:12px;padding:16px 20px;margin-top:16px;box-shadow:0 4px 16px rgba(15,23,42,0.2)}
+.summary-title{font-size:10px;font-weight:800;opacity:0.5;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px}
+.summary-parts{display:flex;gap:0;margin-bottom:14px}
+.s-part{flex:1;text-align:center;padding:0 6px;border-right:1px solid rgba(255,255,255,0.1)}
+.s-part:last-child{border-right:none}
+.s-val{font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.02em}
+.s-lbl{font-size:9px;opacity:0.55;font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.04em;color:#fff}
+.s-total-row{background:rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,0.12)}
+.s-total-num{font-size:44px;font-weight:900;line-height:1;color:#fff;letter-spacing:-0.04em}
+.s-total-info{text-align:right}
+.s-total-max{font-size:16px;color:rgba(255,255,255,0.5);font-weight:700}
+.s-total-band{font-size:13px;font-weight:800;margin-top:4px;color:#fff;opacity:0.85}
+
+/* STICKY SAVE */
+.save-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px 14px;background:rgba(248,250,252,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--t200);z-index:60;box-shadow:0 -4px 20px rgba(15,23,42,0.1)}
+.save-btn{width:100%;max-width:1000px;margin:0 auto;display:flex;padding:16px 22px;background:linear-gradient(135deg,var(--emerald-600),var(--emerald),#10b981);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;font-family:var(--font);align-items:center;justify-content:space-between;box-shadow:0 5px 20px rgba(5,150,105,0.4);transition:all .15s;letter-spacing:-0.02em}
+.save-btn:active{transform:scale(.99)}
+.save-btn:disabled{background:linear-gradient(135deg,#6ee7b7,#34d399);box-shadow:none;cursor:not-allowed}
+.save-btn.saved{background:linear-gradient(135deg,#14532d,var(--emerald-600))}
+.save-btn-score{font-size:22px;font-weight:900;background:rgba(255,255,255,0.2);padding:4px 14px;border-radius:8px;letter-spacing:-0.03em}
+
+/* BACKUP */
+.bkp-card{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(15,23,42,0.08);margin-bottom:14px;border:1px solid var(--t200);border-left:3px solid var(--gold)}
+.bkp-title{font-size:12px;font-weight:800;color:var(--gold);margin-bottom:10px}
+.bkp-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bkp-inp{border:1.5px solid var(--t200);border-radius:8px;padding:9px 12px;font-size:13px;background:#fff;color:var(--navy-800);font-family:monospace;outline:none;transition:all .2s}
+.bkp-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,119,6,0.1)}
+
+/* LOADING / EMPTY */
+.ldg{display:flex;align-items:center;justify-content:center;gap:12px;padding:60px;color:var(--t400)}
+.spin{width:30px;height:30px;border:3px solid var(--t200);border-top-color:var(--emerald);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:70px 20px}
+.empty-ico{font-size:52px;margin-bottom:14px;display:block;opacity:0.5}
+.empty-state p{font-size:15px;color:var(--t400)}
+
+/* TOAST */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:13px 22px;border-radius:12px;font-size:14px;font-weight:700;z-index:200;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(15,23,42,0.35)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══════════════════════════════════════
+   MANAGEMENT OVERLAY — Clean & Readable
+══════════════════════════════════════ */
+.mgmt-overlay{position:fixed;inset:0;background:#f0f4f8;z-index:500;overflow-y:auto}
+.mgmt-hdr{background:var(--navy);padding:16px 20px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(15,23,42,0.4)}
+.mgmt-hdr-l h2{font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.02em}
+.mgmt-hdr-l p{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
+.mgmt-body{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+
+/* MANAGEMENT CARDS - white clean */
+.mgmt-card{background:#fff;border-radius:16px;margin-bottom:18px;overflow:hidden;box-shadow:0 2px 12px rgba(15,23,42,0.1);border:1px solid var(--t200)}
+.mgmt-card:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(15,23,42,0.12)}
+.mgmt-card{transition:all .2s}
+.mgmt-card-hdr{padding:18px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--t100)}
+.mgmt-rank{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0}
+.mgmt-info{flex:1}
+.mgmt-name{font-size:18px;font-weight:900;color:var(--navy);letter-spacing:-0.03em}
+.mgmt-meta{font-size:12px;color:var(--t500);margin-top:3px;font-weight:500}
+.mgmt-total{text-align:center;padding:8px 16px;border-radius:10px;min-width:80px}
+.mgmt-total-num{font-size:30px;font-weight:900;line-height:1;letter-spacing:-0.04em}
+.mgmt-total-lbl{font-size:10px;font-weight:800;opacity:0.6;text-transform:uppercase;letter-spacing:0.05em}
+.mgmt-body-inner{padding:18px 20px}
+
+/* BENTO SCORE RADAR */
+.score-radar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.radar-item{background:var(--t50);border-radius:10px;padding:14px 8px;text-align:center;border:1px solid var(--t200);transition:all .2s;cursor:pointer;position:relative}
+.radar-item:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,23,42,0.08)}
+.radar-item::after{content:'▼';position:absolute;bottom:4px;right:6px;font-size:9px;color:var(--t300);font-weight:700}
+.radar-expand{display:none;background:#fff;border-radius:12px;border:1px solid var(--t200);padding:16px;margin-top:10px;text-align:left;box-shadow:0 4px 16px rgba(15,23,42,0.1)}
+.radar-expand.open{display:block}
+.expand-q{padding:10px 12px;border-radius:8px;margin-bottom:6px;border:1px solid var(--t200);background:var(--t50)}
+.expand-q-txt{font-size:12px;font-weight:700;color:var(--navy-700);margin-bottom:6px;line-height:1.5;direction:rtl;text-align:right}
+.expand-q-txt.ltr{direction:ltr;text-align:left}
+.expand-ans{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700}
+.ans-correct{background:var(--emerald-50);color:var(--emerald-600);border:1px solid rgba(5,150,105,0.2)}
+.ans-wrong{background:var(--rl);color:var(--rd);border:1px solid rgba(220,38,38,0.2)}
+.ans-neutral{background:var(--t100);color:var(--t600);border:1px solid var(--t200)}
+.radar-val{font-size:24px;font-weight:900;line-height:1;letter-spacing:-0.03em}
+.radar-bar{height:5px;background:var(--t200);border-radius:3px;margin:8px 4px 4px;overflow:hidden}
+.radar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.radar-lbl{font-size:9px;font-weight:800;color:var(--t500);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px}
+.radar-item.iq .radar-val{color:var(--sapphire)}.radar-item.iq .radar-fill{background:var(--sapphire)}
+.radar-item.psych .radar-val{color:var(--violet)}.radar-item.psych .radar-fill{background:var(--violet)}
+.radar-item.pers .radar-val{color:var(--gold)}.radar-item.pers .radar-fill{background:var(--gold)}
+.radar-item.vision .radar-val{color:#0f766e}.radar-item.vision .radar-fill{background:#14b8a6}
+.radar-item.acad .radar-val{color:var(--emerald)}.radar-item.acad .radar-fill{background:var(--emerald)}
+
+/* ESSAYS IN MANAGEMENT */
+.mgmt-essays h4{font-size:11px;font-weight:800;color:var(--t500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.mgmt-essay-item{background:var(--t50);border-radius:10px;padding:14px;margin-bottom:8px;border:1px solid var(--t200)}
+.mgmt-essay-q{font-size:11px;font-weight:800;color:var(--emerald-600);margin-bottom:6px;letter-spacing:0.01em}
+.mgmt-essay-txt{font-size:13px;color:var(--navy-700);line-height:1.75;font-weight:400}
+
+.vol-review-box{background:var(--emerald-50);border-radius:12px;padding:16px;border:1px solid rgba(5,150,105,0.2);margin-top:14px}
+.vol-review-title{font-size:11px;font-weight:800;color:var(--emerald-600);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.vol-comment-display{font-size:13px;color:var(--navy-700);line-height:1.75;font-style:italic;font-weight:400}
+
+/* REC BADGES */
+.rec-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;margin-top:10px;border:1px solid transparent}
+.rec-sr{background:var(--emerald-50);color:var(--emerald-600);border-color:rgba(5,150,105,0.25)}
+.rec-r{background:var(--sapphire-light);color:var(--sapphire);border-color:rgba(29,78,216,0.25)}
+.rec-b{background:var(--gold-light);color:#92400e;border-color:rgba(217,119,6,0.25)}
+.rec-nr{background:var(--rl);color:var(--rd);border-color:rgba(220,38,38,0.25)}
+
+.ai-report-box{background:var(--violet-light);border-radius:12px;padding:16px;border:1px solid #c4b5fd;margin-top:14px}
+.ai-report-title{font-size:11px;font-weight:800;color:#5b21b6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.ai-report-txt{font-size:13px;color:#3b0764;line-height:1.8;font-weight:400}
+.no-ai{background:var(--gold-light);border-radius:10px;padding:12px;font-size:12px;color:#92400e;text-align:center;font-weight:700;border:1px solid rgba(217,119,6,0.2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.btn-s{background:rgba(255,255,255,0.12);color:#fff}
+.btn-sm{padding:6px 12px;font-size:12px}
+
+@media(max-width:640px){
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .panel-grid{grid-template-columns:1fr}
+  .score-radar{grid-template-columns:repeat(3,1fr)}
+  .rec-options{grid-template-columns:repeat(2,1fr)}
+  .summary-parts{flex-wrap:wrap}
+}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--t300);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-brand">
+      <div class="hdr-logo">📊</div>
+      <div>
+        <div class="hdr-title">Volunteer Scoring Panel</div>
+        <div class="hdr-sub">Shibli Trust · FSc Scholarship Assessment</div>
+      </div>
+    </div>
+    <div class="hdr-actions" id="hdr-actions" style="display:none">
+      <button class="hdr-btn hdr-btn-ghost" onclick="loadStudents()">🔄 Refresh</button>
+      <button class="hdr-btn hdr-btn-ghost" onclick="window.print()">🖨️ Print</button>
+      <button class="hdr-btn hdr-btn-mgmt" onclick="openMgmt()">🔒 Management</button>
+    </div>
+  </div>
+</div>
+
+<!-- PIN GATE -->
+<div id="gate-screen">
+  <div class="gate-screen">
+    <div class="gate-card">
+      <div class="gate-emblem">🔐</div>
+      <h2>Volunteer Access</h2>
+      <p>This panel shows all student submissions in real-time. Enter your PIN to continue.</p>
+      <div class="pin-label">Enter PIN</div>
+      <input class="pin-inp" type="password" id="pin" maxlength="3" placeholder="•••" oninput="chkPin()" autofocus>
+      <div class="pin-err" id="perr">❌ Incorrect PIN. Try again.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+  <div class="wrap">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Students</div></div>
+      <div class="stat-card green"><div class="stat-num" id="st-scored">0</div><div class="stat-lbl">Scored</div></div>
+      <div class="stat-card blue"><div class="stat-num" id="st-top">—</div><div class="stat-lbl">Top Score</div></div>
+      <div class="stat-card gold"><div class="stat-num" id="st-avg">—</div><div class="stat-lbl">Avg SJT</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="st-rec">0</div><div class="stat-lbl">Recommended</div></div>
+    </div>
+
+    <!-- Progress -->
+    <div class="prog-card">
+      <div class="prog-info">
+        <div class="prog-title"><span>Scoring Progress</span><span id="prog-txt">0 of 0</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+
+    <!-- Backup -->
+    <div class="bkp-card">
+      <div class="bkp-title">📋 Offline Backup — Add Student Manually</div>
+      <div class="bkp-row">
+        <input type="text" class="bkp-inp" id="bkp-code" placeholder="Backup code" maxlength="20" style="width:180px">
+        <input type="text" class="bkp-inp" id="bkp-name" placeholder="Student Name" style="width:140px;font-family:var(--font);letter-spacing:normal">
+        <input type="text" class="bkp-inp" id="bkp-city" placeholder="City" style="width:110px;font-family:var(--font);letter-spacing:normal">
+        <button class="hdr-btn" style="background:var(--gold);color:#fff" onclick="addBackup()">+ Add</button>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search-box">
+        <span style="color:var(--t400)">🔍</span>
+        <input type="text" placeholder="Search by name or city..." oninput="filterCards(this.value)">
+      </div>
+      <select class="ctrl-sel" onchange="sortStudents(this.value)">
+        <option value="total">Sort: Total Score</option>
+        <option value="sjt">Sort: SJT Score</option>
+        <option value="name">Sort: Name A–Z</option>
+        <option value="pending">Sort: Pending First</option>
+      </select>
+    </div>
+
+    <!-- Cards -->
+    <div id="cards-loading" class="ldg"><div class="spin"></div>&nbsp;Loading students...</div>
+    <div id="cards-empty" class="empty-state" style="display:none">
+      <div class="empty-ico">📭</div>
+      <p>No submissions yet. Students appear here as they submit.</p>
+    </div>
+    <div id="cards-list"></div>
+
+  </div>
+
+  <!-- Sticky Save -->
+  <div class="save-bar" id="save-bar" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding:0 2px">
+      <span style="font-size:11px;color:var(--t500);font-weight:600">⚠️ Scroll down to score all sections before saving</span>
+      <span id="autosave-ind" style="font-size:11px;font-weight:700;color:var(--g);opacity:0;transition:opacity .3s">✅ Auto-saved</span>
+    </div>
+    <button class="save-btn" id="save-btn" onclick="saveCurrent()">
+      <span id="save-btn-label">💾 Save Scores</span>
+      <span class="save-btn-score" id="save-btn-score">—</span>
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby28lMA8ecWzXCJ_oF3nbOqy70p6ea7TfFuxfrVcqfmLvfmhtIo86m7ADpRGDjO2vPx/exec";
+const PIN = "786";
+const MGMT_PIN = "987";
+
+let allStudents = [];
+let openId = null;
+
+const obsItems = [
+  {t:"Greeted others and introduced himself respectfully", pts:2},
+  {t:"Respectful toward volunteers, mentors, and peers", pts:2},
+  {t:"Prayed on time without needing a reminder", pts:2},
+  {t:"Positive attitude — no complaining throughout the day", pts:2},
+  {t:"Showed genuine curiosity — asked meaningful questions", pts:2},
+  {t:"Language was appropriate — no bad words or disrespectful talk", pts:2},
+  {t:"Mobile phone usage was disciplined — not distracted by phone", pts:2},
+  {t:"Was punctual — arrived on time for all sessions", pts:2},
+  {t:"Cooperative in group activities — helped others", pts:2},
+  {t:"Appearance and cleanliness were neat and presentable", pts:2}
+];
+
+const SCORE_MEANINGS = ['','Very Poor','Poor','Below Average','Average','Good','Very Good','Excellent'];
+
+
+// ── API KEY ──
+function saveApiKey(){
+  const key = document.getElementById('api-key-input').value.trim();
+  if(!key){ alert('Please enter your API key.'); return; }
+  localStorage.setItem('shibli_api_key', key);
+  document.getElementById('api-key-status').textContent = '✅ Saved!';
+  setTimeout(()=>document.getElementById('api-key-status').textContent='',2000);
+}
+
+function getApiKey(){
+  return localStorage.getItem('shibli_api_key') || '';
+}
+
+// Load saved API key on startup
+(function(){
+  const saved = localStorage.getItem('shibli_api_key');
+  if(saved){
+    const inp = document.getElementById('api-key-input');
+    if(inp) inp.value = saved;
+  }
+})();
+
+
+// ── Question Data for Management Expand ──
+const IQ_QUESTIONS = [
+  {q:"اس سلسلے میں اگلا نمبر کیا ہوگا؟   2، 4، 8، 16، ___",opts:["24","32","20","18"],correct:1},
+  {q:"قلم کا کاغذ سے وہی تعلق ہے جو برش کا ___ سے ہے۔",opts:["پانی","رنگ","کمرہ","درخت"],correct:1},
+  {q:"ان میں سے کون سا مختلف ہے؟   گائے، بکری، بھینس، شیر، اونٹ",opts:["گائے","اونٹ","شیر","بھینس"],correct:2},
+  {q:"اگر تمام بلیاں جانور ہیں اور کچھ جانور سفید ہیں، تو:",opts:["تمام بلیاں سفید ہیں","کوئی بلی سفید نہیں","کچھ بلیاں سفید ہو سکتی ہیں","بلیاں جانور نہیں"],correct:2},
+  {q:"1، 1، 2، 3، 5، 8، ___ — اگلا نمبر کیا ہوگا؟",opts:["10","11","12","13"],correct:3},
+  {q:"A، C، E، G، ___ — اگلا حرف کیا ہوگا؟",opts:["H","I","J","K"],correct:1},
+  {q:"ایک دکاندار نے 100 روپے میں چیز خریدی اور 130 روپے میں بیچی۔ فائدہ کتنے فیصد ہے؟",opts:["20%","13%","30%","25%"],correct:2},
+  {q:"ایک گاؤں میں بارش نہ ہو تو سب سے پہلے کیا ہوگا؟",opts:["لوگ شہر چلے جائیں گے","فصلیں خراب ہوں گی","اسکول بند ہوں گے","بجلی نہیں آئے گی"],correct:1},
+  {q:"ان میں سے کون سا گروپ درست ہے؟",opts:["سیب، آم، گاجر، انگور","لاہور، کراچی، کوئٹہ، پشاور","کتاب، قلم، میز، پرندہ","سورج، چاند، ستارہ، پانی"],correct:1},
+  {q:"احمد کے پاس 500 روپے ہیں۔ اس نے 120 روپے کی کتاب اور 80 روپے کا قلم خریدا۔ اس کے پاس کتنے روپے بچے؟",opts:["200","280","300","320"],correct:2}
+];
+
+const SJT_QUESTIONS = [
+  {q:"Biology میں C گریڈ ملا، دوستوں نے بہتر نتیجہ پایا — اگلا قدم؟",opts:["استاد سے پرچہ دیکھ کر ہر غلطی پہچانیں","ایک دن مایوس رہیں پھر محنت کا عزم کریں","Biology چھوڑ کر دوسرے مضامین پر توجہ دیں"],best:0},
+  {q:"ہاسٹل ٹیسٹ میں پڑھنے کے باوجود فیل — والدین کو کیا کہیں گے؟",opts:["سچ بتائیں اور بہتری کا منصوبہ شیئر کریں","کہیں ٹھیک رہا اور خاموشی سے بہتر کریں","استاد کو ذمہ دار ٹھہرائیں"],best:0},
+  {q:"ڈیبیٹ مقابلے میں پہلے راؤنڈ میں باہر — اگلا دن؟",opts:["جج سے فیڈبیک لیں اور اگلے موقع کے لیے رجسٹر کریں","جذباتی طور پر سنبھلنے کے لیے دن لیں","مقابلے چھوڑ دیں"],best:0},
+  {q:"ہم جماعتوں سے پیچھے ہیں — کیا کریں گے؟",opts:["کمزور موضوعات پہچانیں اور سینئر سے مشورہ لیں","لمبے گھنٹے پڑھیں کم سوئیں","امید رکھیں چیزیں ٹھیک ہوں گی"],best:0},
+  {q:"استاد نے کلاس میں تنقید کی — رویہ کیا ہوگا؟",opts:["توجہ سے سنیں اور بہتری کا طریقہ پوچھیں","شرمندگی کو حوصلے کے طور پر استعمال کریں","ناانصافی سمجھیں"],best:0},
+  {q:"پڑھنے کا وقت تھا، فون پر گھنٹہ گزر گیا — اب کیا؟",opts:["فون رکھیں اور باقی وقت پوری توجہ سے پڑھیں","گناہگار محسوس کریں اور کوشش کریں","سوچیں سیشن برباد ہوا اور سو جائیں"],best:0},
+  {q:"دوست کرکٹ کھیل رہے، اہم باب باقی ہے — کیا کریں؟",opts:["پہلے باب ختم کریں پھر کھیلیں","30 منٹ کھیلیں پھر پڑھیں","رات کو پڑھنے کا سوچ کر چلے جائیں"],best:0},
+  {q:"ایک ہفتے میں تین کام جمع کرانے ہیں — منصوبہ؟",opts:["روزانہ تقسیم کریں اور ٹریک کریں","آسان سے شروع کریں","آخری رات کریں دباؤ میں بہتر کام آتا ہے"],best:0},
+  {q:"پڑھتے ہوئے YouTube پر تعلیمی ویڈیو آئی — کیا کریں؟",opts:["بعد میں دیکھنا میں محفوظ کریں واپس پڑھیں","5-10 منٹ دیکھیں تعلیمی ہے","پوری دیکھیں تعلیمی مواد ہے"],best:0},
+  {q:"Maths کا باب دو ہفتے سے ٹالا ہوا — پہلا قدم؟",opts:["ابھی باب کھولیں اور شیڈول بنائیں","رات کو YouTube پر explanation دیکھیں","مضبوط مضامین پر توجہ دیں"],best:0},
+  {q:"گروپ اسٹڈی میں بات مذاق میں تبدیل — کیا کریں؟",opts:["تھوڑا لطف اٹھائیں پھر خوشی سے واپس لائیں","خاموشی سے چلے جائیں","بیٹھے رہیں پریشان ہوں"],best:0},
+  {q:"امتحان سے پہلے رات کو پریشانی — کیا کریں؟",opts:["دعا کریں اہم نوٹس دیکھیں جلدی سوئیں","چائے پئیں تھکاوٹ تک پڑھتے رہیں","فون پر ہلکی چیز دیکھیں"],best:0},
+  {q:"Mentor نے Essay writing کمزور کہی — اگلا قدم؟",opts:["شکریہ کہیں مثالیں مانگیں اسی شام دوبارہ لکھیں","خاموشی سے قبول کریں","Mentor نے قدر نہیں کی اور آگے بڑھیں"],best:0},
+  {q:"Orientation میں گروپ سرگرمی میں پیچھے ہیں — رویہ؟",opts:["مصروف رہیں طریقے آزمائیں بہتر سے مشورہ لیں","خاموشی سے کوشش کریں","الگ ہو جائیں نالائق نہ لگیں"],best:0},
+  {q:"تھکا دینے والے دن کے بعد Discussion session — کیا کریں؟",opts:["پوری توجہ سے شرکت کریں کم از کم ایک بات کریں","شرکت کریں مگر خاموش رہیں","حاضری لازمی ہو تو جائیں"],best:0}
+];
+
+function toggleRadarExpand(studentId, section){
+  const expandId = `expand_${studentId}_${section}`;
+  const el = document.getElementById(expandId);
+  if(!el) return;
+  const isOpen = el.classList.contains('open');
+  // Close all expands for this student
+  document.querySelectorAll(`[id^="expand_${studentId}_"]`).forEach(e=>e.classList.remove('open'));
+  if(!isOpen) el.classList.add('open');
+}
+
+function buildExpandContent(st, section){
+  const id = st.id;
+  if(section === 'iq'){
+    const answers = st.iqAnswers || [];
+    return IQ_QUESTIONS.map((q,i)=>{
+      const chosen = answers[i] !== undefined ? answers[i] : -1;
+      const isCorrect = (chosen === q.correct * 4); // score 4 = correct
+      const chosenIdx = chosen === 4 ? q.correct : (chosen === 0 ? -1 : -1);
+      // Find which option was chosen based on score
+      let chosenText = 'Not answered';
+      let ansClass = 'ans-neutral';
+      if(chosen === 4){ chosenText = q.opts[q.correct]; ansClass='ans-correct'; }
+      else if(chosen === 0 && answers[i] !== undefined){
+        // Wrong answer chosen - we don't know which one, just show wrong
+        chosenText = 'Wrong answer chosen';
+        ansClass = 'ans-wrong';
+      }
+      return `<div class="expand-q">
+        <div class="expand-q-txt">${i+1}. ${q.q}</div>
+        <span class="expand-ans ${ansClass}">${chosen===4?'✅':'❌'} ${chosenText}</span>
+        <span style="font-size:11px;color:var(--t400);margin-left:8px">Correct: ${q.opts[q.correct]}</span>
+      </div>`;
+    }).join('');
+  }
+  if(section === 'psych'){
+    const answers = st.sjtAnswers || [];
+    return SJT_QUESTIONS.map((q,i)=>{
+      const score = answers[i] || 0;
+      const level = score === 5 ? '⭐ Best' : score === 3 ? '✅ Good' : score === 1 ? '⚠️ Weak' : '—';
+      const cls = score === 5 ? 'ans-correct' : score === 1 ? 'ans-wrong' : 'ans-neutral';
+      return `<div class="expand-q">
+        <div class="expand-q-txt">${i+1}. ${q.q}</div>
+        <span class="expand-ans ${cls}">${level} Response</span>
+        <span style="font-size:11px;color:var(--t400);margin-left:6px">Score: ${score}/5</span>
+      </div>`;
+    }).join('');
+  }
+  if(section === 'pers'){
+    const score = st.volPersScore||0;
+    const meaning = ['','Very Poor','Poor','Below Average','Average','Good','Very Good','Excellent'][score]||'Not scored';
+    return `<div class="expand-q">
+      <div class="expand-q-txt ltr" style="font-size:13px">Volunteer Personality Rating: <b>${score}/7</b> — ${meaning}</div>
+      ${st.volComment?`<div style="margin-top:10px;font-size:12px;color:var(--t500);font-weight:700">Volunteer Comment:</div>
+      <div style="font-size:13px;color:var(--navy-700);margin-top:4px;line-height:1.7;font-style:italic">${st.volComment}</div>`:'<div style="font-size:12px;color:var(--t400)">No volunteer comment added.</div>'}
+    </div>
+    <div class="expand-q" style="margin-top:8px">
+      <div style="font-size:12px;font-weight:700;color:var(--t500);margin-bottom:8px">Personality indicators checked:</div>
+      ${['Future goals mentioned','Social responsibility shown','Islamic values expressed','Leadership indicators','Specific career plan'].map(t=>`<div style="font-size:12px;color:var(--navy-700);padding:4px 0;border-bottom:1px solid var(--t100)">• ${t}</div>`).join('')}
+    </div>`;
+  }
+  if(section === 'vision'){
+    return `<div class="expand-q">
+      <div style="font-size:11px;font-weight:800;color:var(--emerald-600);margin-bottom:6px">Essay 1 — Family & Financial Background</div>
+      <div style="font-size:13px;color:var(--navy-700);line-height:1.75">${st.vision1||'Not answered'}</div>
+    </div>
+    <div class="expand-q">
+      <div style="font-size:11px;font-weight:800;color:var(--emerald-600);margin-bottom:6px">Essay 2 — Pakistan Problem & Solution</div>
+      <div style="font-size:13px;color:var(--navy-700);line-height:1.75">${st.vision2||'Not answered'}</div>
+    </div>
+    <div class="expand-q">
+      <div style="font-size:11px;font-weight:800;color:var(--emerald-600);margin-bottom:6px">Essay 3 — Self Reflection & Future Goals</div>
+      <div style="font-size:13px;color:var(--navy-700);line-height:1.75">${st.vision3||'Not answered'}</div>
+    </div>`;
+  }
+  if(section === 'acad'){
+    const pct = st.marksGot && st.marksTotal ? Math.round(st.marksGot/st.marksTotal*100) : null;
+    return `<div class="expand-q">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="text-align:center;padding:14px;background:var(--t50);border-radius:8px;border:1px solid var(--t200)">
+          <div style="font-size:28px;font-weight:900;color:var(--navy)">${st.marksGot||'—'}</div>
+          <div style="font-size:11px;color:var(--t400);font-weight:700;margin-top:4px">MARKS OBTAINED</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--t50);border-radius:8px;border:1px solid var(--t200)">
+          <div style="font-size:28px;font-weight:900;color:var(--navy)">${st.marksTotal||'—'}</div>
+          <div style="font-size:11px;color:var(--t400);font-weight:700;margin-top:4px">TOTAL MARKS</div>
+        </div>
+      </div>
+      ${pct!==null?`<div style="margin-top:12px;text-align:center;background:var(--emerald-50);border-radius:8px;padding:12px;border:1px solid rgba(5,150,105,0.2)">
+        <div style="font-size:24px;font-weight:900;color:var(--emerald)">${pct}%</div>
+        <div style="font-size:11px;color:var(--emerald-600);font-weight:700">Percentage → Academic Score: ${st.academicScore||'—'}/40</div>
+      </div>`:'<div style="margin-top:8px;font-size:12px;color:var(--t400);text-align:center">Academic score not yet entered by volunteer.</div>'}
+    </div>`;
+  }
+  return '';
+}
+
+// ── PIN ──
+function chkPin(){
+  const v = document.getElementById('pin').value;
+  if(v.length === 3){
+    if(v === PIN){
+      document.getElementById('gate-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('hdr-actions').style.display = 'flex';
+      loadStudents();
+      setInterval(()=>{
+      // Only auto-refresh if no panel is currently open (to avoid losing scoring work)
+      if(!openId) loadStudents();
+    }, 30000);
+    } else {
+      document.getElementById('perr').style.display = 'block';
+      document.getElementById('pin').value = '';
+    }
+  }
+}
+
+// ── LOAD ──
+async function loadStudents(){
+  if(false){ allStudents = DEMO; renderCards(); return; }
+  try{
+    const r = await fetch(SCRIPT_URL + '?action=getData');
+    const d = await r.json();
+    if(d.students) allStudents = d.students;
+    renderCards();
+  } catch(e){
+    document.getElementById('cards-loading').innerHTML = '<div style="color:var(--rd);padding:20px;text-align:center;font-size:14px">⚠️ Connection error. Check internet and refresh.</div>';
+  }
+}
+
+// ── BAND ──
+function getBand(t){ return t>=80?{l:'⭐ Excellent',c:'band-excellent'}: t>=65?{l:'✅ Recommended',c:'band-recommended'}: t>=50?{l:'⚠️ Borderline',c:'band-borderline'}: t>0?{l:'❌ Low',c:'band-low'}:{l:'Pending',c:'band-pending'}; }
+
+// ── RENDER ──
+function renderCards(){
+  const sorted = [...allStudents].sort((a,b)=>(b.totalScore||b.sjtScore||0)-(a.totalScore||a.sjtScore||0));
+  const scored = sorted.filter(s=>s.volIqScore||s.academicScore);
+  const totals = scored.map(s=>s.totalScore||0);
+  const sjts = sorted.map(s=>s.sjtScore||0);
+
+  document.getElementById('st-total').textContent = sorted.length;
+  document.getElementById('st-scored').textContent = scored.length;
+  document.getElementById('st-top').textContent = totals.length ? Math.max(...totals) : '—';
+  document.getElementById('st-avg').textContent = sjts.length ? Math.round(sjts.reduce((a,b)=>a+b,0)/sjts.length) : '—';
+  document.getElementById('st-rec').textContent = totals.filter(t=>t>=65).length;
+
+  const pct = sorted.length ? Math.round(scored.length/sorted.length*100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-txt').textContent = `${scored.length} of ${sorted.length} scored`;
+  document.getElementById('cards-loading').style.display = 'none';
+
+  if(!sorted.length){ document.getElementById('cards-empty').style.display='block'; return; }
+  document.getElementById('cards-empty').style.display = 'none';
+
+  const list = document.getElementById('cards-list');
+  list.innerHTML = '';
+  sorted.forEach((st, i)=>{
+    const rank = i+1;
+    const total = st.totalScore||0;
+    const isScored = !!(st.volIqScore || st.academicScore);
+    const band = total > 0 ? getBand(total) : {l:'Tap to Score',c:'band-pending'};
+    const rkClass = rank===1?'rk-1':rank===2?'rk-2':rank===3?'rk-3':'rk-n';
+    const rkIcon = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
+
+    const card = document.createElement('div');
+    card.className = 'student-card' + (isScored?' scored':'');
+    card.id = `card-${st.id}`;
+    card.innerHTML = `
+      <div class="card-header" onclick="toggleCard('${st.id}')">
+        <div class="rank-num ${rkClass}">${rkIcon}</div>
+        <div class="card-info">
+          <div class="card-name">${st.name||'—'}</div>
+          <div class="card-meta">${st.city||'—'} · SJT: ${st.sjtScore||0}/50 · IQ: ${st.iqScore||0}/40 · Need: ${st.seScore||0}/5</div>
+        </div>
+        <div class="card-right">
+          ${total > 0 ? `<div class="score-badge"><div class="score-big" style="color:${total>=65?'var(--g)':total>=50?'var(--am)':'var(--rd)'}">${total}</div><div class="score-max">/100</div></div>` : `<div class="tap-score">📝 Score Now</div>`}
+          <span class="band-pill ${band.c}">${band.l}</span>
+        </div>
+        <div class="chevron" id="chev-${st.id}">▼</div>
+      </div>
+      <div class="scoring-panel" id="panel-${st.id}">
+        <div class="panel-wrap" id="panel-inner-${st.id}"></div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ── TOGGLE CARD ──
+function toggleCard(id){
+  const panel = document.getElementById(`panel-${id}`);
+  const chev = document.getElementById(`chev-${id}`);
+  const isOpen = panel.classList.contains('open');
+
+  document.querySelectorAll('.scoring-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.chevron.open').forEach(c=>c.classList.remove('open'));
+  document.querySelectorAll('.student-card.open').forEach(c=>c.classList.remove('open'));
+  document.getElementById('save-bar').style.display = 'none';
+  openId = null;
+
+  if(!isOpen){
+    panel.classList.add('open');
+    chev.classList.add('open');
+    document.getElementById(`card-${id}`).classList.add('open');
+    openId = id;
+    buildPanel(id);
+    document.getElementById('save-bar').style.display = 'block';
+    setTimeout(()=>document.getElementById(`card-${id}`).scrollIntoView({behavior:'smooth',block:'start'}),120);
+  }
+}
+
+// ── BUILD PANEL ──
+function buildPanel(id){
+  const st = allStudents.find(s=>s.id===id)||{};
+  const obsHtml = obsItems.map((item,i)=>`
+    <div class="obs-item" id="obsitem-${id}-${i}" onclick="toggleObs('${id}',${i})">
+      <div class="obs-text">${item.t}</div>
+      <div class="obs-pts">+${item.pts}pt</div>
+      <label class="toggle" onclick="event.stopPropagation()">
+        <input type="checkbox" id="ob_${id}_${i}" onchange="calcAll('${id}')">
+        <div class="tog-track"></div><div class="tog-thumb"></div>
+      </label>
+    </div>`).join('');
+
+  document.getElementById(`panel-inner-${id}`).innerHTML = `
+    <div class="panel-grid">
+
+      <!-- IQ Score -->
+      <div class="score-section">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">🧠</span><span class="sec-name">IQ Score</span></div>
+          <span class="sec-max">Auto: ${st.iqScore||0}/40</span>
+        </div>
+        <div style="font-size:12px;color:var(--t400);margin-bottom:10px">Rate the student's logical reasoning quality (1=Very Poor, 7=Excellent)</div>
+        ${buildScoreTrack(id,'iq',st.volIqScore||4)}
+      </div>
+
+      <!-- Psychology Score -->
+      <div class="score-section">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">🧬</span><span class="sec-name">Psychology</span></div>
+          <span class="sec-max">SJT: ${st.sjtScore||0}/50</span>
+        </div>
+        <div style="font-size:12px;color:var(--t400);margin-bottom:10px">Rate resilience, humility, discipline based on SJT answers & behaviour</div>
+        ${buildScoreTrack(id,'psych',st.volPsychScore||4)}
+      </div>
+
+      <!-- Personality Score -->
+      <div class="score-section">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">🌱</span><span class="sec-name">Personality</span></div>
+          <span class="sec-max">out of 7</span>
+        </div>
+        <div style="font-size:12px;color:var(--t400);margin-bottom:10px">Rate leadership, motivation, social responsibility, respect for others</div>
+        ${buildScoreTrack(id,'pers',st.volPersScore||4)}
+      </div>
+
+      <!-- Vision/Essays -->
+      <div class="score-section">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">💛</span><span class="sec-name">Vision & Essays</span></div>
+          <span class="sec-max">out of 7</span>
+        </div>
+        <div style="font-size:12px;color:var(--t400);margin-bottom:10px">Rate quality of written essays — thinking depth, values, self-awareness</div>
+        ${buildScoreTrack(id,'vision',st.volVisionScore||4)}
+        <div class="essay-block" style="margin-top:10px">
+          <div class="essay-q">Essay 1 — Family & Need</div>
+          <div class="essay-text">${st.vision1||'(Not answered)'}</div>
+        </div>
+        <div class="essay-block">
+          <div class="essay-q">Essay 2 — Pakistan Problem</div>
+          <div class="essay-text">${st.vision2||'(Not answered)'}</div>
+        </div>
+        <div class="essay-block">
+          <div class="essay-q">Essay 3 — Self Reflection</div>
+          <div class="essay-text">${st.vision3||'(Not answered)'}</div>
+        </div>
+      </div>
+
+      <!-- Academic -->
+      <div class="score-section">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">📊</span><span class="sec-name">Academic Score</span></div>
+          <span class="sec-max">Max 40 pts</span>
+        </div>
+        <div class="acad-row">
+          <div class="field"><label>Marks Obtained</label><input type="number" id="ag_${id}" placeholder="e.g. 960" value="${st.marksGot||''}" oninput="calcAll('${id}')"></div>
+          <div class="field"><label>Total Marks</label><input type="number" id="at_${id}" placeholder="1100" value="${st.marksTotal||1100}" oninput="calcAll('${id}')"></div>
+        </div>
+        <div class="acad-result">Academic Score: <b id="ashow_${id}">${st.academicScore||'—'}</b> / 40</div>
+      </div>
+
+      <!-- Observation -->
+      <div class="score-section full">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">👁️</span><span class="sec-name">Behaviour Observation</span></div>
+          <span class="sec-max">10 questions · Each /10</span>
+        </div>
+        <div style="font-size:12px;color:var(--t400);margin-bottom:12px">Rate each behaviour from 1 (very poor) to 10 (excellent) based on what you observed today.</div>
+        ${obsItems.map((item,i)=>`
+        <div style="background:#fff;border-radius:10px;border:1px solid var(--t200);padding:12px 14px;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:700;color:var(--t800);margin-bottom:10px">${i+1}. ${item.t}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            ${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div onclick="setObsItem('${id}',${i},${n})" id="obsq_${id}_${i}_${n}" style="width:36px;height:36px;border-radius:7px;border:2px solid var(--t200);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;cursor:pointer;color:var(--t400);background:#fff;transition:all .15s;user-select:none;flex-shrink:0">${n}</div>`).join('')}
+          </div>
+          <div style="font-size:11px;color:var(--t400);margin-top:5px">Score: <b id="obsqval_${id}_${i}">—</b>/10</div>
+        </div>`).join('')}
+        <div style="background:var(--gl);border-radius:8px;padding:10px 14px;text-align:center;font-size:14px;font-weight:800;color:var(--gm);border:1px solid var(--gg)">
+          Total Observation Score: <span id="oshow_${id}">${st.obsScore||0}</span> / 10
+        </div>
+      </div>
+
+      <!-- AI Evaluate -->
+      <div class="score-section full">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">🤖</span><span class="sec-name">AI Essay Evaluation</span></div>
+          <button class="ai-btn" id="ai-btn-${id}" onclick="autoEvaluate('${id}')">🤖 Evaluate Essays with AI</button>
+        </div>
+        <div class="ai-result" id="ai-result-${id}"></div>
+      </div>
+
+      <!-- Volunteer Review -->
+      <div class="score-section full">
+        <div class="sec-header">
+          <div class="sec-title"><span class="sec-icon">✍️</span><span class="sec-name">Volunteer Review & Comments</span></div>
+        </div>
+        <div style="font-size:12px;color:var(--t600);margin-bottom:8px;font-weight:600">Your personal observations about this student:</div>
+        <textarea class="vol-comment" id="vc_${id}" oninput="saveDraft('${id}')" placeholder="Write your observations, impressions, concerns, or anything notable about this student...">${st.volComment||''}</textarea>
+        <div style="font-size:12px;font-weight:700;color:var(--t600);margin-top:14px;margin-bottom:6px">Your Recommendation:</div>
+        <div class="rec-options">
+          <div class="rec-opt" id="rec_sr_${id}" onclick="setRec('${id}','strongly_recommend')">⭐ Strongly Recommend</div>
+          <div class="rec-opt" id="rec_r_${id}" onclick="setRec('${id}','recommend')">✅ Recommend</div>
+          <div class="rec-opt" id="rec_b_${id}" onclick="setRec('${id}','borderline')">⚠️ Borderline</div>
+          <div class="rec-opt" id="rec_nr_${id}" onclick="setRec('${id}','not_recommend')">❌ Not Recommend</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Score Summary -->
+    <div class="score-summary-bar">
+      <div class="summary-title">Score Breakdown</div>
+      <div class="summary-parts">
+        <div class="s-part"><div class="s-val">${st.sjtScore||0}</div><div class="s-lbl">SJT</div></div>
+        <div class="s-part"><div class="s-val" id="asum_${id}">${st.academicScore||'—'}</div><div class="s-lbl">Academic</div></div>
+        <div class="s-part"><div class="s-val" id="iqsum_${id}">${st.volIqScore||'—'}</div><div class="s-lbl">IQ Score</div></div>
+        <div class="s-part"><div class="s-val" id="psychsum_${id}">${st.volPsychScore||'—'}</div><div class="s-lbl">Psychology</div></div>
+        <div class="s-part"><div class="s-val" id="perssum_${id}">${st.volPersScore||'—'}</div><div class="s-lbl">Personality</div></div>
+        <div class="s-part"><div class="s-val" id="vissum_${id}">${st.volVisionScore||'—'}</div><div class="s-lbl">Vision</div></div>
+        <div class="s-part"><div class="s-val" id="osum_${id}">${st.obsScore||'—'}</div><div class="s-lbl">Obs</div></div>
+        <div class="s-part"><div class="s-val">${st.seScore||0}</div><div class="s-lbl">Need</div></div>
+      </div>
+      <div class="s-total-row">
+        <div>
+          <div style="font-size:11px;opacity:.6;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Total Score</div>
+          <div class="s-total-num" id="tshow_${id}">${st.totalScore||'—'}</div>
+        </div>
+        <div class="s-total-info">
+          <div class="s-total-max">/ 100</div>
+          <div class="s-total-band" id="band-show-${id}">${st.totalScore?getBand(st.totalScore).l:''}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Set recommendation
+  if(st.volRec) setRec(id, st.volRec, true);
+  calcAll(id);
+  // Restore any unsaved draft
+  setTimeout(()=>restoreDraft(id), 50);
+}
+
+function buildScoreTrack(id, key, current){
+  const dots = [1,2,3,4,5,6,7].map(n=>`<div class="score-dot ${n===current?'active-'+n:''}" id="sd_${id}_${key}_${n}" onclick="setScore('${id}','${key}',${n})">${n}</div>`).join('');
+  return `<div class="score-track">${dots}</div><div class="score-meaning" id="sm_${id}_${key}">${SCORE_MEANINGS[current]||''}</div>`;
+}
+
+function setScore(id, key, val){
+  [1,2,3,4,5,6,7].forEach(n=>{
+    const el = document.getElementById(`sd_${id}_${key}_${n}`);
+    if(el){ el.className = 'score-dot' + (n===val?' active-'+n:''); }
+  });
+  const sm = document.getElementById(`sm_${id}_${key}`);
+  if(sm) sm.textContent = SCORE_MEANINGS[val]||'';
+  calcAll(id);
+}
+
+function getScore(id, key){
+  for(let n=7;n>=1;n--){
+    const el = document.getElementById(`sd_${id}_${key}_${n}`);
+    if(el && el.className.includes('active')) return n;
+  }
+  return 0;
+}
+
+let recValues = {};
+function setRec(id, val, silent){
+  recValues[id] = val;
+  const map = {strongly_recommend:'sr', recommend:'r', borderline:'b', not_recommend:'nr'};
+  const cls = {sr:'sel-sr', r:'sel-r', b:'sel-b', nr:'sel-nr'};
+  Object.keys(map).forEach(k=>{
+    const el = document.getElementById(`rec_${map[k]}_${id}`);
+    if(el){ el.classList.remove('sel-sr','sel-r','sel-b','sel-nr'); if(k===val) el.classList.add(cls[map[k]]); }
+  });
+}
+
+function setObsItem(id, qi, val){
+  for(let n=1;n<=10;n++){
+    const el = document.getElementById(`obsq_${id}_${qi}_${n}`);
+    if(!el) continue;
+    if(n<=val){
+      const color = n<=3?'#ef4444':n<=5?'#f97316':n<=7?'#22c55e':'#166534';
+      el.style.background=color; el.style.color='#fff'; el.style.borderColor=color;
+    } else {
+      el.style.background='#fff'; el.style.color='var(--t400)'; el.style.borderColor='var(--t200)';
+    }
+  }
+  const lbl = document.getElementById(`obsqval_${id}_${qi}`);
+  if(lbl) lbl.textContent = val;
+  // Update total
+  const total = getObsScore(id);
+  const totalEl = document.getElementById(`oshow_${id}`);
+  if(totalEl) totalEl.textContent = total;
+  calcAll(id);
+}
+
+function getObsScore(id){
+  let total = 0;
+  let count = 0;
+  obsItems.forEach((item,i)=>{
+    const lbl = document.getElementById(`obsqval_${id}_${i}`);
+    const val = lbl ? parseInt(lbl.textContent)||0 : 0;
+    total += val;
+    count++;
+  });
+  // Scale: sum of all scores (max = 5 questions * 10 = 50) → scale to 10
+  return count > 0 ? Math.round(total/10) : 0;
+}
+
+function getAcadScore(id){
+  const got = parseFloat(document.getElementById(`ag_${id}`)?.value)||0;
+  const tot = parseFloat(document.getElementById(`at_${id}`)?.value)||1100;
+  return got ? Math.round(got/tot*40) : null;
+}
+
+function calcAll(id){
+  const st = allStudents.find(s=>s.id===id)||{};
+  const acad = getAcadScore(id);
+  const obs = getObsScore(id);
+  const iqVol = getScore(id,'iq');
+  const psych = getScore(id,'psych');
+  const pers = getScore(id,'pers');
+  const vis = getScore(id,'vision');
+
+  // Normalize volunteer scores (1-7) to point contributions
+  // IQ vol score → /7 contribution (max 7)
+  // Psych → /7 (max 7)  Pers → /7 (max 7)  Vision → /7 (max 7)
+  // Total = SJT/50 + Acad/40 + obs/10 + need/5 + iqVol*1 + psych*1 + pers*1 + vis*1 = /115 normalized to /100
+  const sjt = st.sjtScore||0;
+  const need = st.seScore||0;
+  const raw = acad !== null ? sjt + (acad||0) + obs + need + iqVol + psych + pers + vis : null;
+  // Normalize: max possible = 50+40+10+5+7+7+7+7 = 133 → scale to 100
+  const total = raw !== null ? Math.round(raw/133*100) : null;
+
+  const set = (eid,v)=>{ const e=document.getElementById(eid); if(e) e.textContent=v; };
+  set(`ashow_${id}`, acad!==null?acad:'—');
+  set(`asum_${id}`, acad!==null?acad:'—');
+  set(`oshow_${id}`, obs);
+  set(`osum_${id}`, obs);
+  set(`iqsum_${id}`, iqVol||'—');
+  set(`psychsum_${id}`, psych||'—');
+  set(`perssum_${id}`, pers||'—');
+  set(`vissum_${id}`, vis||'—');
+  set(`tshow_${id}`, total!==null?total:'—');
+  if(total!==null){ const band=getBand(total); set(`band-show-${id}`,band.l); }
+
+  // Update save button
+  const btn = document.getElementById('save-btn-score');
+  const lbl = document.getElementById('save-btn-label');
+  if(btn) btn.textContent = total!==null?`${total}/100`:'—';
+  if(lbl) lbl.textContent = `💾 Save — ${st.name||'Student'}`;
+
+  // Auto-save draft to localStorage so scores are never lost
+  saveDraft(id);
+}
+
+function saveDraft(id){
+  try{
+    const draft = {
+      ag: document.getElementById(`ag_${id}`)?.value||'',
+      at: document.getElementById(`at_${id}`)?.value||'',
+      iq: getScore(id,'iq'),
+      psych: getScore(id,'psych'),
+      pers: getScore(id,'pers'),
+      vision: getScore(id,'vision'),
+      vc: document.getElementById(`vc_${id}`)?.value||'',
+      rec: recValues[id]||'',
+      obs: {}
+    };
+    obsItems.forEach((_,i)=>{
+      const lbl = document.getElementById(`obsqval_${id}_${i}`);
+      draft.obs[i] = lbl ? parseInt(lbl.textContent)||0 : 0;
+    });
+    localStorage.setItem(`draft_${id}`, JSON.stringify(draft));
+    // Show auto-saved indicator
+    const ind = document.getElementById('autosave-ind');
+    if(ind){ ind.textContent='✅ Auto-saved'; ind.style.opacity='1'; setTimeout(()=>ind.style.opacity='0',1500); }
+  }catch(e){}
+}
+
+function restoreDraft(id){
+  try{
+    const raw = localStorage.getItem(`draft_${id}`);
+    if(!raw) return;
+    const draft = JSON.parse(raw);
+    if(draft.ag){ const el=document.getElementById(`ag_${id}`); if(el) el.value=draft.ag; }
+    if(draft.at){ const el=document.getElementById(`at_${id}`); if(el) el.value=draft.at; }
+    if(draft.iq) setScore(id,'iq',draft.iq);
+    if(draft.psych) setScore(id,'psych',draft.psych);
+    if(draft.pers) setScore(id,'pers',draft.pers);
+    if(draft.vision) setScore(id,'vision',draft.vision);
+    if(draft.vc){ const el=document.getElementById(`vc_${id}`); if(el) el.value=draft.vc; }
+    if(draft.rec) setRec(id,draft.rec);
+    if(draft.obs){
+      Object.entries(draft.obs).forEach(([i,val])=>{
+        if(val>0) setObsItem(id,parseInt(i),val);
+      });
+    }
+    calcAll(id);
+    showToast('📋 Previous scores restored');
+  }catch(e){}
+}
+
+// ── SAVE ──
+async function saveCurrent(){
+  if(!openId) return;
+  const id = openId;
+  const st = allStudents.find(s=>s.id===id)||{};
+  const got = parseFloat(document.getElementById(`ag_${id}`)?.value)||0;
+  const tot = parseFloat(document.getElementById(`at_${id}`)?.value)||1100;
+  const acadScore = got ? Math.round(got/tot*40) : 0;
+  const obsScore = getObsScore(id);
+  const volIqScore = getScore(id,'iq');
+  const volPsychScore = getScore(id,'psych');
+  const volPersScore = getScore(id,'pers');
+  const volVisionScore = getScore(id,'vision');
+  const volComment = document.getElementById(`vc_${id}`)?.value||'';
+  const volRec = recValues[id]||'';
+  const sjt = st.sjtScore||0;
+  const need = st.seScore||0;
+  const raw = sjt + acadScore + obsScore + need + volIqScore + volPsychScore + volPersScore + volVisionScore;
+  const totalScore = Math.round(raw/133*100);
+
+  const payload = {
+    action:'updateScores', id,
+    marksGot:got, marksTotal:tot, academicScore:acadScore,
+    obsScore, volIqScore, volPsychScore, volPersScore, volVisionScore,
+    volComment, volRec, totalScore,
+    // legacy fields
+    visionScore1:Math.round(volVisionScore/2), visionScore2:volVisionScore-Math.round(volVisionScore/2),
+    visionScore:volVisionScore, obsScore
+  };
+
+  const idx = allStudents.findIndex(s=>s.id===id);
+  if(idx>=0) Object.assign(allStudents[idx], payload);
+
+  const btn = document.getElementById('save-btn');
+  const lbl = document.getElementById('save-btn-label');
+  btn.disabled = true; lbl.textContent = '⏳ Saving...';
+
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+    btn.classList.add('saved');
+    lbl.textContent = `✅ Saved — ${st.name}`;
+    document.getElementById('save-btn-score').textContent = `${totalScore}/100`;
+    localStorage.removeItem(`draft_${openId}`);
+    showToast(`✅ ${st.name} scored ${totalScore}/100`);
+    renderCards();
+    setTimeout(()=>{ btn.disabled=false; btn.classList.remove('saved'); calcAll(id); }, 2500);
+  } catch(e){
+    btn.disabled=false; lbl.textContent='⚠️ Save failed — tap retry';
+    showToast('❌ Save failed. Check connection.');
+  }
+}
+
+// ── AUTO ESSAY EVALUATION (No API needed) ──
+function autoEvaluate(id){
+  const st = allStudents.find(s=>s.id===id)||{};
+  const btn = document.getElementById(`ai-btn-${id}`);
+  const result = document.getElementById(`ai-result-${id}`);
+  btn.disabled=true; btn.textContent='⏳ Evaluating...';
+  result.style.display='block';
+  result.innerHTML='<i>📊 Analysing essays...</i>';
+
+  const e1 = (st.vision1||'').toLowerCase();
+  const e2 = (st.vision2||'').toLowerCase();
+  const e3 = (st.vision3||'').toLowerCase();
+  const all = e1 + ' ' + e2 + ' ' + e3;
+
+  // Word counts
+  const wc1 = e1.split(/\s+/).filter(w=>w.length>1).length;
+  const wc2 = e2.split(/\s+/).filter(w=>w.length>1).length;
+  const wc3 = e3.split(/\s+/).filter(w=>w.length>1).length;
+  const totalWords = wc1+wc2+wc3;
+
+  // ── IQ / THINKING SCORE ──
+  let iqScore = 3;
+  // Problem identification
+  if(/problem|issue|challenge|crisis|lack|shortage|poverty|unemployment|education|health/i.test(e2)) iqScore++;
+  // Solution thinking
+  if(/solution|solve|fix|improve|build|create|establish|government|policy|fund|help|change/i.test(e2)) iqScore++;
+  // Cause & effect
+  if(/because|reason|result|therefore|due to|leads to|affect|impact|cause/i.test(all)) iqScore++;
+  // Self awareness
+  if(/(strength|good at|best at|weakness|weak|improve|working on|struggle)/i.test(e3)) iqScore++;
+  // Word effort bonus
+  if(totalWords > 120) iqScore = Math.min(7, iqScore+1);
+  if(totalWords < 30) iqScore = Math.max(1, iqScore-1);
+  iqScore = Math.min(7, Math.max(1, iqScore));
+
+  // ── PSYCHOLOGY / CHARACTER SCORE ──
+  let psychScore = 3;
+  // Honesty/humility
+  if(/weakness|mistake|fail|struggle|difficult|honest|admit|improve/i.test(e3)) psychScore++;
+  // Gratitude
+  if(/grateful|thankful|blessing|alhamdulillah|allah|dua|appreciate|opportunity/i.test(all)) psychScore++;
+  // Resilience
+  if(/difficult|hard|challenge|despite|still|continue|keep|never give up|try again/i.test(all)) psychScore++;
+  // Family responsibility awareness
+  if(/family|parents|father|mother|brother|sister|responsibility|support/i.test(e1)) psychScore++;
+  // Not entitled (no complaints about scholarship)
+  if(!/(deserve more|should get|unfair|why not|not enough)/i.test(all)) psychScore++;
+  psychScore = Math.min(7, Math.max(1, psychScore));
+
+  // ── PERSONALITY SCORE ──
+  let persScore = 3;
+  // Future vision / goals
+  if(/future|goal|want to become|plan|career|engineer|doctor|teacher|serve|contribute/i.test(e3)) persScore++;
+  // Social responsibility
+  if(/community|society|people|help others|serve|nation|pakistan|poor|others/i.test(all)) persScore++;
+  // Leadership indicators
+  if(/lead|organize|team|group|initiative|volunteer|represent|captain|head/i.test(all)) persScore++;
+  // Islamic values
+  if(/allah|islam|pray|prayer|quran|sunnah|honest|truth|right path|halal/i.test(all)) persScore++;
+  // Specific actionable goals (not vague)
+  if(/university|degree|job|field|subject|study|profession/i.test(e3)) persScore++;
+  persScore = Math.min(7, Math.max(1, persScore));
+
+  // ── VISION / ESSAY QUALITY SCORE ──
+  let visionScore = 3;
+  // Specificity - mentions specific places, numbers, names
+  if(/lahore|karachi|islamabad|rawalpindi|punjab|sindh|kpk|balochistan|village|district/i.test(all)) visionScore++;
+  // Personal story
+  if(/my father|my mother|my family|my school|my village|i remember|i saw|i felt/i.test(all)) visionScore++;
+  // Pakistan context awareness
+  if(/pakistan|government|country|nation|people of pakistan|our country/i.test(e2)) visionScore++;
+  // Financial clarity in essay 1
+  if(/(rupees|rs\.|income|salary|earning|wage|afford|fee|expense|monthly)/i.test(e1)) visionScore++;
+  // Essay effort (length)
+  if(totalWords > 100) visionScore++;
+  if(wc1 < 10 || wc2 < 10 || wc3 < 10) visionScore = Math.max(1, visionScore-1);
+  visionScore = Math.min(7, Math.max(1, visionScore));
+
+  // ── GENERATE REPORT ──
+  const iqLabel = iqScore>=6?'Strong':'iqScore'>=4?'Moderate':'Needs Development';
+  const psychLabel = psychScore>=6?'Strong':'psychScore'>=4?'Moderate':'Needs Development';
+  const persLabel = persScore>=6?'Strong':'persScore'>=4?'Moderate':'Needs Development';
+  const visLabel = visionScore>=6?'Strong':'visionScore'>=4?'Moderate':'Needs Development';
+
+  const iqLvl = iqScore>=6?'Strong thinker':iqScore>=4?'Average reasoning':'Limited analytical depth';
+  const psychLvl = psychScore>=6?'Mature & grounded':psychScore>=4?'Generally balanced':'May need guidance';
+  const persLvl = persScore>=6?'Clear vision & values':persScore>=4?'Developing purpose':'Vague goals';
+  const visLvl = visionScore>=6?'Detailed & specific':visionScore>=4?'Adequate effort':'Brief or vague';
+
+  const overallAvg = Math.round((iqScore+psychScore+persScore+visionScore)/4*10)/10;
+  const verdict = overallAvg>=5.5?'✅ Strong candidate — recommend for interview':
+                  overallAvg>=4?'⚠️ Average candidate — consider with caution':
+                  '❌ Weak essays — further assessment needed';
+
+  const report = `<b style="font-size:13px;color:#4c1d95">📊 Automated Essay Evaluation Report</b><br><br>
+<b>🧠 IQ & Thinking (${iqScore}/7):</b> ${iqLvl}. 
+${iqScore>=5?'Shows logical cause-effect reasoning and problem awareness.':iqScore>=3?'Basic thinking present but lacks depth in analysis.':'Essays show limited structured reasoning.'}
+${totalWords>100?'Good essay effort ('+totalWords+' words total).':'Short responses ('+totalWords+' words) — may indicate low effort.'}<br><br>
+<b>🧬 Psychology (${psychScore}/7):</b> ${psychLvl}. 
+${psychScore>=5?'Shows humility, self-awareness, and balanced outlook.':psychScore>=3?'Some positive indicators but limited depth of character expression.':'Limited evidence of self-reflection or resilience.'}<br><br>
+<b>🌱 Personality (${persScore}/7):</b> ${persLvl}. 
+${persScore>=5?'Demonstrates clear goals, social responsibility and good values.':persScore>=3?'Some future vision present but goals are general.':'Goals are vague or absent — needs stronger personal direction.'}<br><br>
+<b>💛 Vision & Essay Quality (${visionScore}/7):</b> ${visLvl}. 
+${visionScore>=5?'Essays are specific, personal and show Pakistan context awareness.':visionScore>=3?'Adequate effort but could be more specific and detailed.':'Essays are too brief or generic — limited insight into the student.'}<br><br>
+<b>⭐ Overall Verdict:</b> ${verdict}<br>
+<small style="color:#6b7280">Note: This is automated keyword analysis. Volunteer judgment should take priority over these scores.</small>`;
+
+  result.innerHTML = report;
+
+  // Auto-apply scores
+  setScore(id,'iq',iqScore);
+  setScore(id,'psych',psychScore);
+  setScore(id,'pers',persScore);
+  setScore(id,'vision',visionScore);
+  calcAll(id);
+
+  // Save to student data
+  const idx = allStudents.findIndex(s=>s.id===id);
+  if(idx>=0) allStudents[idx].aiReport = result.innerHTML;
+
+  btn.disabled=false;
+  btn.textContent='🔄 Re-evaluate';
+  showToast('✅ Essay evaluation complete!');
+}
+
+// ── MANAGEMENT ──
+function openMgmt(){
+  const pin = prompt('Enter Senior Management PIN:');
+  if(!pin) return;
+  if(pin !== MGMT_PIN){ alert('❌ Incorrect PIN.'); return; }
+  renderMgmt();
+}
+
+function renderMgmt(){
+  const existing = document.getElementById('mgmt-overlay');
+  if(existing) existing.remove();
+  const sorted = [...allStudents].sort((a,b)=>(b.totalScore||b.sjtScore||0)-(a.totalScore||a.sjtScore||0));
+
+  const recBadge = {
+    strongly_recommend:'<span class="rec-badge rec-sr">⭐ Strongly Recommend</span>',
+    recommend:'<span class="rec-badge rec-r">✅ Recommend</span>',
+    borderline:'<span class="rec-badge rec-b">⚠️ Borderline</span>',
+    not_recommend:'<span class="rec-badge rec-nr">❌ Not Recommend</span>',
+    '':'<span style="color:var(--t400);font-size:12px">No recommendation yet</span>'
+  };
+
+  const cardsHtml = sorted.map((st,i)=>{
+    const rank = i+1;
+    const total = st.totalScore||0;
+    const band = getBand(total);
+    const rkClass = rank===1?'rk-1':rank===2?'rk-2':rank===3?'rk-3':'rk-n';
+    const rkIcon = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
+    const totalColor = total>=65?'var(--g)':total>=50?'var(--am)':'var(--rd)';
+
+    const iqPct = (st.volIqScore||0)/7*100;
+    const psychPct = (st.volPsychScore||0)/7*100;
+    const persPct = (st.volPersScore||0)/7*100;
+    const visPct = (st.volVisionScore||0)/7*100;
+    const acadPct = (st.academicScore||0)/40*100;
+
+    return `<div class="mgmt-card">
+      <div class="mgmt-card-hdr" style="background:${total>=65?'linear-gradient(135deg,#f0fdf4,#dcfce7)':total>=50?'linear-gradient(135deg,#fffbeb,#fef3c7)':'linear-gradient(135deg,#fff1f2,#fee2e2)'}">
+        <div class="rank-num ${rkClass}">${rkIcon}</div>
+        <div class="mgmt-info">
+          <div class="mgmt-name">${st.name||'—'}</div>
+          <div class="mgmt-meta">${st.city||'—'} · ${st.school||'—'} · Matric: ${st.marks||'—'} · Phone: ${st.phone||'—'}</div>
+        </div>
+        <div class="mgmt-total" style="background:${totalColor}22;border:2px solid ${totalColor}44">
+          <div class="mgmt-total-num" style="color:${totalColor}">${total||'—'}</div>
+          <div class="mgmt-total-lbl">/100</div>
+        </div>
+      </div>
+      <div class="mgmt-body-inner">
+        <div class="score-radar">
+          <div class="radar-item iq" onclick="toggleRadarExpand('${st.id}','iq')" title="Click to see IQ questions & answers">
+            <div class="radar-val">${st.volIqScore||'—'}</div>
+            <div class="radar-bar"><div class="radar-fill" style="width:${iqPct}%"></div></div>
+            <div class="radar-lbl">IQ /7</div>
+          </div>
+          <div class="radar-item psych" onclick="toggleRadarExpand('${st.id}','psych')" title="Click to see SJT questions & answers">
+            <div class="radar-val">${st.volPsychScore||'—'}</div>
+            <div class="radar-bar"><div class="radar-fill" style="width:${psychPct}%"></div></div>
+            <div class="radar-lbl">Psychology /7</div>
+          </div>
+          <div class="radar-item pers" onclick="toggleRadarExpand('${st.id}','pers')" title="Click to see personality details">
+            <div class="radar-val">${st.volPersScore||'—'}</div>
+            <div class="radar-bar"><div class="radar-fill" style="width:${persPct}%"></div></div>
+            <div class="radar-lbl">Personality /7</div>
+          </div>
+          <div class="radar-item vision" onclick="toggleRadarExpand('${st.id}','vision')" title="Click to see all 3 essays">
+            <div class="radar-val">${st.volVisionScore||'—'}</div>
+            <div class="radar-bar"><div class="radar-fill" style="width:${visPct}%"></div></div>
+            <div class="radar-lbl">Vision /7</div>
+          </div>
+          <div class="radar-item acad" onclick="toggleRadarExpand('${st.id}','acad')" title="Click to see academic marks">
+            <div class="radar-val">${st.academicScore||'—'}</div>
+            <div class="radar-bar"><div class="radar-fill" style="width:${acadPct}%"></div></div>
+            <div class="radar-lbl">Academic /40</div>
+          </div>
+        </div>
+        <div style="margin-bottom:4px;font-size:11px;color:var(--t400);font-weight:600;text-align:center">👆 Click any tile to see details</div>
+        <div id="expand_${st.id}_iq" class="radar-expand">${buildExpandContent(st,'iq')}</div>
+        <div id="expand_${st.id}_psych" class="radar-expand">${buildExpandContent(st,'psych')}</div>
+        <div id="expand_${st.id}_pers" class="radar-expand">${buildExpandContent(st,'pers')}</div>
+        <div id="expand_${st.id}_vision" class="radar-expand">${buildExpandContent(st,'vision')}</div>
+        <div id="expand_${st.id}_acad" class="radar-expand">${buildExpandContent(st,'acad')}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;font-size:12px">
+          <span style="background:var(--t100);padding:3px 10px;border-radius:6px;font-weight:700">SJT: ${st.sjtScore||0}/50</span>
+          <span style="background:var(--t100);padding:3px 10px;border-radius:6px;font-weight:700">IQ Quiz: ${st.iqScore||0}/40</span>
+          <span style="background:var(--t100);padding:3px 10px;border-radius:6px;font-weight:700">Obs: ${st.obsScore||0}/10</span>
+          <span style="background:var(--t100);padding:3px 10px;border-radius:6px;font-weight:700">Need: ${st.seScore||0}/5</span>
+          <span class="band-pill ${band.c}">${band.l}</span>
+        </div>
+        <div class="mgmt-essays">
+          <h4>Essays Written</h4>
+          <div class="mgmt-essay-item"><div class="mgmt-essay-q">Essay 1 — Family & Financial Background</div><div class="mgmt-essay-txt">${st.vision1||'Not answered'}</div></div>
+          <div class="mgmt-essay-item"><div class="mgmt-essay-q">Essay 2 — Pakistan Problem & Solution</div><div class="mgmt-essay-txt">${st.vision2||'Not answered'}</div></div>
+          <div class="mgmt-essay-item"><div class="mgmt-essay-q">Essay 3 — Self Reflection & Future Goals</div><div class="mgmt-essay-txt">${st.vision3||'Not answered'}</div></div>
+        </div>
+        <div class="vol-review-box">
+          <div class="vol-review-title">👤 Volunteer Review</div>
+          <div class="vol-comment-display">${st.volComment||'<span style="color:var(--t400);font-style:normal">No volunteer comments yet.</span>'}</div>
+          <div style="margin-top:8px">${recBadge[st.volRec||'']}</div>
+        </div>
+        ${st.aiReport ? `<div class="ai-report-box"><div class="ai-report-title">🤖 AI Evaluation Report</div><div class="ai-report-txt">${st.aiReport.replace(/\n/g,'<br>')}</div></div>` : '<div class="no-ai" style="margin-top:12px">⚠️ AI evaluation not done. Open scoring panel and click AI Evaluate.</div>'}
+      </div>
+    </div>`;
+  }).join('');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'mgmt-overlay';
+  overlay.id = 'mgmt-overlay';
+  overlay.innerHTML = `
+    <div class="mgmt-hdr">
+      <div class="mgmt-hdr-l">
+        <h2>🔒 Senior Management Report</h2>
+        <p>Confidential · ${sorted.length} students · ${sorted.filter(s=>s.totalScore>=65).length} recommended · ${sorted.filter(s=>(s.totalScore||0)>=80).length} excellent</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="window.print()" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer">🖨️ Print</button>
+        <button onclick="document.getElementById('mgmt-overlay').remove()" style="background:#dc2626;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer">✕ Close</button>
+      </div>
+    </div>
+    <div class="mgmt-body">${cardsHtml}</div>`;
+  document.body.appendChild(overlay);
+}
+
+// ── HELPERS ──
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+function filterCards(q){
+  document.querySelectorAll('.student-card').forEach(c=>{
+    c.style.display = c.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function sortStudents(by){
+  if(by==='sjt') allStudents.sort((a,b)=>(b.sjtScore||0)-(a.sjtScore||0));
+  else if(by==='name') allStudents.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  else if(by==='pending') allStudents.sort((a,b)=>{
+    const aS=a.totalScore>0?1:0, bS=b.totalScore>0?1:0; return aS-bS;
+  });
+  else allStudents.sort((a,b)=>(b.totalScore||b.sjtScore||0)-(a.totalScore||a.sjtScore||0));
+  openId=null; document.getElementById('save-bar').style.display='none'; renderCards();
+}
+function addBackup(){
+  const code=document.getElementById('bkp-code').value.trim();
+  const name=document.getElementById('bkp-name').value.trim();
+  const city=document.getElementById('bkp-city').value.trim();
+  if(!code||!name){ alert('Enter backup code and name.'); return; }
+  const sjtScore=Math.round(code.slice(0,15).split('').map(Number).reduce((a,b)=>a+b,0)/75*50);
+  const seScore=Math.round(code.slice(15).split('').map(Number).reduce((a,b)=>a+b,0)/12*5);
+  allStudents.push({id:'bkp_'+Date.now(),name,city,school:'(Manual)',marks:'—',sjtScore,seScore,totalScore:0,iqScore:0});
+  renderCards();
+  ['bkp-code','bkp-name','bkp-city'].forEach(id=>document.getElementById(id).value='');
+  showToast(`✅ Added ${name}`);
+}
+
+const DEMO = [
+  {id:'d1',name:'Ahmad Raza',city:'Lahore',school:'Govt. HS',marks:'91%',sjtScore:42,seScore:4,iqScore:32,totalScore:0,vision1:'My father works as a daily wage laborer. We are 7 members and income is very low. I want this scholarship to change my family condition.',vision2:'Education is big problem in Pakistan. Poor children cannot study. I would make free schools in villages.',vision3:'My strength is I work hard. My weakness is sometimes I feel nervous. In 5 years I want to become engineer.'},
+  {id:'d2',name:'Bilal Hassan',city:'Swabi',school:'Federal Model',marks:'78%',sjtScore:35,seScore:5,iqScore:28,totalScore:0,vision1:'Our family has small shop. We are struggling. My father wants me to study but money is problem.',vision2:'Unemployment is very big issue. Young people have no jobs. Government should make more factories.',vision3:'I am good in mathematics. I am weak in English. I want to become teacher and teach poor children.'},
+  {id:'d3',name:'Saad Khalid',city:'Multan',school:'Army Public School',marks:'85%',sjtScore:38,seScore:2,iqScore:36,totalScore:75,academicScore:28,obsScore:8,volIqScore:5,volPsychScore:6,volPersScore:5,volVisionScore:5,volComment:'Very mature student. Asked good questions during the session. Seemed genuine and motivated.',volRec:'recommend',vision1:'My father is retired government employee. We have house but savings are low. I need scholarship for college fees.',vision2:'Water shortage is big problem in Punjab. Many farms are destroyed. We should build more dams.',vision3:'I am disciplined and punctual. I get nervous in public speaking. I want to become civil servant.'},
+];
+loadStudents();
+</script>
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shibli Trust — Scholarship Assessment</title>
+<link href='https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap' rel='stylesheet'>
+<style>
+/* ═══════════════════════════════════════════════════
+   SHIBLI TRUST STUDENT PORTAL — Modern Academic UI
+   Portal Identity: Calm · Minimalist · Trust-Inspiring
+═══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  /* ── Core Palette ── */
+  --navy:#0f172a;
+  --navy-800:#1e293b;
+  --navy-700:#334155;
+  --navy-600:#475569;
+  --emerald:#059669;
+  --emerald-400:#34d399;
+  --emerald-100:#d1fae5;
+  --emerald-50:#ecfdf5;
+  --g:var(--emerald);
+  --gd:#047857;
+  --gl:var(--emerald-100);
+  --gg:#6ee7b7;
+  --am:#d97706;
+  --al:#fef3c7;
+  --rd:#dc2626;
+  --rl:#fee2e2;
+
+  /* ── Neutral Scale ── */
+  --gray-50:#f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-800:#1e293b;
+  --gray-900:#0f172a;
+
+  /* ── Legacy vars ── */
+  --t0:#fff;--t50:var(--gray-50);--t100:var(--gray-100);--t200:var(--gray-200);
+  --t300:var(--gray-300);--t400:var(--gray-400);--t500:var(--gray-500);
+  --t600:var(--gray-600);--t700:var(--gray-700);--t800:var(--gray-800);--t900:var(--gray-900);
+
+  /* ── Glassmorphism ── */
+  --glass-bg:rgba(255,255,255,0.75);
+  --glass-border:rgba(255,255,255,0.4);
+  --glass-shadow:0 4px 24px rgba(15,23,42,0.08), 0 1px 4px rgba(15,23,42,0.04);
+
+  /* ── Typography ── */
+  --font:'Plus Jakarta Sans',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+
+  /* ── Radii ── */
+  --r:14px;--r-sm:8px;--r-lg:20px;
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; scroll-behavior:smooth; }
+
+body {
+  font-family:var(--font-body);
+  background:linear-gradient(135deg, #eef2ff 0%, #f0fdf4 50%, #f0f9ff 100%);
+  background-attachment:fixed;
+  color:var(--navy-800);
+  min-height:100vh;
+  padding-bottom:80px;
+  line-height:1.65;
+}
+
+/* ── HEADER ── */
+.hdr {
+  background:rgba(15,23,42,0.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  color:#fff;
+  padding:14px 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 4px 24px rgba(15,23,42,0.25);
+}
+.hdr-row { display:flex; align-items:center; gap:12px; }
+.hdr-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg, var(--emerald), #10b981);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+  box-shadow:0 4px 12px rgba(5,150,105,0.4);
+  flex-shrink:0;
+}
+.hdr h1 { font-size:14px; font-weight:800; letter-spacing:-0.02em; line-height:1.2; }
+.hdr p { font-size:11px; opacity:0.55; margin-top:2px; font-family:var(--font-body); }
+
+/* ── PROGRESS ── */
+.prog-wrap {
+  background:rgba(255,255,255,0.12);
+  border-radius:4px; height:4px; margin-top:10px; overflow:hidden;
+}
+.prog-fill {
+  height:100%;
+  background:linear-gradient(90deg, var(--emerald-400), #34d399);
+  border-radius:4px;
+  transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 0 8px rgba(52,211,153,0.6);
+}
+.prog-txt { display:flex; justify-content:space-between; font-size:10px; opacity:0.6; margin-top:5px; font-weight:600; letter-spacing:0.03em; }
+
+/* ── CONTAINER ── */
+.box { max-width:540px; margin:0 auto; padding:16px 14px; }
+
+/* ── STEPS ── */
+.step { display:none; } .step.on { display:block; }
+
+/* ── CARD (Glassmorphism) ── */
+.card {
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-radius:var(--r);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  margin-bottom:12px;
+  overflow:hidden;
+  transition:box-shadow 0.3s ease, transform 0.2s ease;
+}
+.card:hover { box-shadow:0 8px 40px rgba(15,23,42,0.12), 0 2px 8px rgba(15,23,42,0.06); }
+
+.card-hd {
+  padding:16px 18px 12px;
+  border-bottom:1px solid rgba(226,232,240,0.6);
+  background:linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+}
+.card-hd .tag {
+  display:inline-flex; align-items:center; gap:5px;
+  background:linear-gradient(135deg, var(--emerald-50), var(--emerald-100));
+  color:var(--emerald);
+  font-size:10px; font-weight:800;
+  padding:3px 10px; border-radius:20px;
+  margin-bottom:8px;
+  text-transform:uppercase; letter-spacing:0.07em;
+  border:1px solid rgba(5,150,105,0.15);
+}
+.card-hd h2 { font-size:16px; font-weight:800; color:var(--navy); letter-spacing:-0.02em; line-height:1.3; font-family:var(--font); }
+.card-hd p { font-size:13px; color:var(--gray-500); margin-top:4px; line-height:1.6; }
+
+.card-bd { padding:18px; }
+
+/* ── FORM FIELDS ── */
+.fg { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.fg.full { grid-template-columns:1fr; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label {
+  font-size:11px; font-weight:700;
+  color:var(--gray-500);
+  text-transform:uppercase; letter-spacing:0.06em;
+}
+.field input, .field select, .field textarea {
+  border:1.5px solid var(--gray-200);
+  border-radius:var(--r-sm);
+  padding:11px 14px;
+  font-size:15px;
+  color:var(--navy-800);
+  font-family:var(--font-body);
+  background:rgba(255,255,255,0.8);
+  transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+  -webkit-appearance:none;
+  outline:none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color:var(--emerald);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(5,150,105,0.12), 0 1px 4px rgba(5,150,105,0.08);
+}
+.field textarea { resize:vertical; min-height:80px; line-height:1.7; }
+.wc { font-size:11px; color:var(--gray-400); text-align:right; margin-top:3px; font-weight:600; }
+
+/* ── SJT QUESTIONS ── */
+.q-wrap { margin-bottom:22px; padding-bottom:22px; border-bottom:1px solid rgba(226,232,240,0.6); }
+.q-wrap:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.q-top { display:flex; gap:12px; margin-bottom:14px; align-items:flex-start; }
+.q-num {
+  min-width:30px; height:30px;
+  background:linear-gradient(135deg, var(--navy), var(--navy-700));
+  color:#fff;
+  border-radius:8px;
+  font-size:11px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:1px;
+  box-shadow:0 2px 6px rgba(15,23,42,0.2);
+}
+.q-txt {
+  font-size:14px; font-weight:600;
+  color:var(--navy-800);
+  line-height:1.65;
+  font-family:var(--font);
+}
+
+/* ── OPTIONS ── */
+.opts { display:flex; flex-direction:column; gap:8px; }
+.opt {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:13px 14px;
+  border:1.5px solid var(--gray-200);
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  background:rgba(255,255,255,0.6);
+  transition:all 0.18s cubic-bezier(0.4,0,0.2,1);
+  user-select:none; min-height:50px;
+  backdrop-filter:blur(8px);
+}
+.opt:hover { border-color:var(--gray-300); background:rgba(255,255,255,0.9); transform:translateY(-1px); box-shadow:0 4px 12px rgba(15,23,42,0.06); }
+.opt.sel { border-color:var(--emerald); background:linear-gradient(135deg, rgba(5,150,105,0.06), rgba(5,150,105,0.02)); box-shadow:0 0 0 3px rgba(5,150,105,0.1), 0 4px 12px rgba(5,150,105,0.08); }
+.opt-l {
+  width:26px; height:26px;
+  border-radius:50%;
+  background:var(--gray-100);
+  color:var(--gray-500);
+  font-size:12px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  transition:all 0.18s;
+  border:1.5px solid var(--gray-200);
+}
+.opt.sel .opt-l { background:var(--emerald); color:#fff; border-color:var(--emerald); box-shadow:0 2px 8px rgba(5,150,105,0.35); }
+.opt-t { font-size:13px; color:var(--gray-600); line-height:1.55; padding-top:3px; }
+
+/* ── SE OPTIONS ── */
+.se-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.se-opt {
+  padding:12px; border:1.5px solid var(--gray-200);
+  border-radius:var(--r-sm); cursor:pointer;
+  background:rgba(255,255,255,0.6);
+  font-size:13px; color:var(--gray-600);
+  transition:all 0.18s cubic-bezier(0.4,0,0.2,1);
+  display:flex; align-items:center; gap:8px;
+  user-select:none; line-height:1.4;
+}
+.se-opt:hover { border-color:var(--gray-300); background:rgba(255,255,255,0.9); }
+.se-opt.sel { border-color:var(--am); background:rgba(217,119,6,0.04); box-shadow:0 0 0 3px rgba(217,119,6,0.1); }
+.se-dot {
+  width:20px; height:20px; border-radius:50%;
+  background:var(--gray-100); font-size:10px; font-weight:800;
+  color:var(--gray-400); display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all 0.18s; border:1px solid var(--gray-200);
+}
+.se-opt.sel .se-dot { background:var(--am); color:#fff; border-color:var(--am); }
+
+/* ── ESSAY PROMPT ── */
+.ep {
+  background:linear-gradient(135deg, rgba(5,150,105,0.06), rgba(5,150,105,0.02));
+  border:1px solid rgba(5,150,105,0.2);
+  border-left:3px solid var(--emerald);
+  border-radius:var(--r-sm);
+  padding:14px 16px; margin-bottom:12px;
+}
+.ep p { font-size:14px; font-weight:600; color:var(--navy-800); line-height:1.65; font-style:italic; font-family:var(--font); }
+.ep small { font-size:12px; color:var(--emerald); display:block; margin-top:5px; font-weight:700; opacity:0.8; }
+
+/* ── NAVIGATION BUTTONS ── */
+.nav { display:flex; justify-content:space-between; align-items:center; padding:0 14px; margin-top:14px; }
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:13px 28px; border-radius:10px; border:none;
+  font-size:15px; font-weight:700; cursor:pointer;
+  font-family:var(--font); transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+  min-height:50px; letter-spacing:-0.01em;
+}
+.btn-p {
+  background:linear-gradient(135deg, var(--emerald), #10b981);
+  color:#fff;
+  box-shadow:0 4px 14px rgba(5,150,105,0.35);
+}
+.btn-p:active { transform:scale(0.97); box-shadow:0 2px 8px rgba(5,150,105,0.25); }
+.btn-p:hover { box-shadow:0 6px 20px rgba(5,150,105,0.45); transform:translateY(-1px); }
+.btn-s { background:var(--gray-100); color:var(--gray-600); border:1px solid var(--gray-200); }
+.btn-s:hover { background:var(--gray-200); }
+.btn-full { width:100%; margin-top:4px; }
+.btn:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
+
+/* ── CONFIRMATION ── */
+.conf { text-align:center; padding:40px 20px; }
+.conf .ico { font-size:56px; margin-bottom:14px; display:block; }
+.conf h2 { font-size:22px; font-weight:900; color:var(--emerald); margin-bottom:8px; letter-spacing:-0.03em; font-family:var(--font); }
+.conf p { font-size:14px; color:var(--gray-500); line-height:1.7; margin-bottom:6px; }
+.conf .ref {
+  background:linear-gradient(135deg, var(--emerald-50), var(--emerald-100));
+  border:1px solid rgba(5,150,105,0.2);
+  border-radius:var(--r-sm); padding:14px 16px;
+  margin:14px 0; font-size:13px; color:var(--emerald); font-weight:700;
+  box-shadow:0 2px 8px rgba(5,150,105,0.1);
+}
+
+/* ── BACKUP CODE ── */
+.bkp { background:var(--al); border:1px solid #fcd34d; border-radius:var(--r-sm); padding:14px 16px; margin:14px 0; }
+.bkp h4 { color:var(--am); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+.bkp-code { font-family:monospace; font-size:18px; font-weight:800; letter-spacing:0.15em; color:var(--navy-800); text-align:center; padding:10px; background:#fff; border-radius:6px; margin-top:6px; word-break:break-all; }
+
+/* ── LOADING ── */
+.loading { display:flex; flex-direction:column; align-items:center; gap:14px; padding:40px 20px; text-align:center; }
+.spin { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--emerald); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading p { font-size:14px; color:var(--gray-500); font-family:var(--font); }
+
+/* ── ERROR ── */
+.err-box { background:var(--rl); border:1px solid #fca5a5; border-radius:var(--r-sm); padding:14px 16px; margin:12px 0; font-size:13px; color:var(--rd); line-height:1.6; }
+
+/* ── URDU TEXT ── */
+.urdu { font-family:'Noto Nastaliq Urdu',serif; direction:rtl; text-align:right; line-height:2.3; font-size:15px; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-icon">🎓</div>
+    <div>
+      <h1>Shibli Trust — Scholarship Assessment</h1>
+      <p>FSc Part 1 · Character & Potential Evaluation</p>
+    </div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog" style="width:12%"></div></div>
+  <div class="prog-txt"><span id="prog-label">Step 1 of 8</span><span id="prog-pct">12%</span></div>
+</div>
+
+<div class="box">
+
+<!-- STEP 0: Info -->
+<div class="step on" id="s0">
+  <div class="card">
+    <div class="card-hd"><div class="tag">📋 Basic Information</div><h2>Your Details</h2><p>Please fill in accurately. All information is confidential.</p></div>
+    <div class="card-bd">
+      <div class="fg" style="margin-bottom:12px">
+        <div class="field"><label>Full Name *</label><input type="text" id="name" placeholder="Muhammad Ali Khan" autocomplete="name"></div>
+        <div class="field"><label>Father's Name *</label><input type="text" id="father" placeholder="Muhammad Khan"></div>
+        <div class="field"><label>City / District *</label><input type="text" id="city" placeholder="e.g. Lahore, Swabi"></div>
+        <div class="field"><label>School Name *</label><input type="text" id="school" placeholder="Govt. High School"></div>
+      </div>
+      <div class="fg full">
+        <div class="field"><label>Contact Number</label><input type="tel" id="phone" placeholder="03XX-XXXXXXX"></div>
+        <div style="margin-top:12px" class="field"><label>Matric Result (% or Grade)</label><input type="text" id="marks" placeholder="e.g. 87% or A1"></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav"><div></div><button class="btn btn-p" onclick="go(1)">Next →</button></div>
+</div>
+
+<!-- STEP 1: SJT Resilience Q1-5 -->
+<div class="step" id="s1">
+  <div class="card">
+    <div class="card-hd"><div class="tag">🔥 Section 1 · Resilience</div><h2>Handling Failure & Setbacks</h2><p>Choose the option that honestly reflects what you would most likely do. No right or wrong answers.</p></div>
+    <div class="card-bd" id="sjt1-body"></div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(0)">← Back</button><button class="btn btn-p" onclick="go(2)">Next →</button></div>
+</div>
+
+<!-- STEP 2: SJT Time Q6-10 -->
+<div class="step" id="s2">
+  <div class="card">
+    <div class="card-hd"><div class="tag">⏰ Section 2 · Focus</div><h2>Time Management & Digital Distraction</h2><p>Be honest — choose what you would actually do, not the ideal answer.</p></div>
+    <div class="card-bd" id="sjt2-body"></div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(1)">← Back</button><button class="btn btn-p" onclick="go(3)">Next →</button></div>
+</div>
+
+<!-- STEP 3: SJT Sincerity Q11-15 -->
+<div class="step" id="s3">
+  <div class="card">
+    <div class="card-hd"><div class="tag">🌿 Section 3 · Sincerity</div><h2>Stress, Pressure & Staying Present</h2><p>How you handle difficulty and feedback in daily life.</p></div>
+    <div class="card-bd" id="sjt3-body"></div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(2)">← Back</button><button class="btn btn-p" onclick="go(4)">Next →</button></div>
+</div>
+
+<!-- STEP 4: Socio-Economic -->
+<div class="step" id="s4">
+  <div class="card">
+    <div class="card-hd"><div class="tag">🏠 Background Survey</div><h2>Your Family & Financial Context</h2><p>Not a test — just helps us understand your situation. Answer honestly.</p></div>
+    <div class="card-bd" id="se-body"></div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(3)">← Back</button><button class="btn btn-p" onclick="go(5)">Next →</button></div>
+</div>
+
+<!-- STEP 5: IQ Test -->
+<div class="step" id="s5">
+  <div class="card">
+    <div class="card-hd"><div class="tag">🧠 ذہانت ٹیسٹ</div><h2 class="urdu">منطقی سوچ کا جائزہ</h2><p class="urdu" style="font-size:13px">ہر سوال کو غور سے پڑھیں اور درست جواب چنیں۔ یہ آپ کی سوچنے کی صلاحیت جانچنے کے لیے ہے۔</p></div>
+    <div class="card-bd" id="iq-body"></div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(4)">← Back</button><button class="btn btn-p" onclick="go(6)">Next →</button></div>
+</div>
+
+
+<div class="step" id="s6">
+  <div class="card">
+    <div class="card-hd"><div class="tag">✍️ Essays</div><h2>Three Short Essays</h2><p>Write in simple English. Do not worry about grammar — your honest thoughts matter most. Max 80 words each.</p></div>
+    <div class="card-bd">
+      <div style="margin-bottom:22px">
+        <div class="ep"><p>Essay 1 — <b>About You & Your Family</b><br>"Tell us about yourself and your family. How does your family manage financially? Why do you need this scholarship, and why do you think you deserve it?"</p><small>Max 80 words · Be honest and specific</small></div>
+        <div class="field"><label>Your Answer</label><textarea id="v1" rows="5" placeholder="Write here in simple English..." oninput="wc('v1','wc1',80)"></textarea><div class="wc" id="wc1">0 / 80 words</div></div>
+      </div>
+      <div style="margin-bottom:22px">
+        <div class="ep"><p>Essay 2 — <b>A Problem in Pakistan</b><br>"What is one big problem you see in Pakistan or your area? Why does it happen? What would you do to help fix it if you had the chance?"</p><small>Max 80 words · Your own thinking matters</small></div>
+        <div class="field"><label>Your Answer</label><textarea id="v2" rows="5" placeholder="Write here in simple English..." oninput="wc('v2','wc2',80)"></textarea><div class="wc" id="wc2">0 / 80 words</div></div>
+      </div>
+      <div>
+        <div class="ep"><p>Essay 3 — <b>About Yourself</b><br>"What are your biggest strengths? What are your weaknesses? What kind of person do you want to become in the next 5 years?"</p><small>Max 80 words · Be honest — no perfect answers</small></div>
+        <div class="field"><label>Your Answer</label><textarea id="v3" rows="5" placeholder="Write here in simple English..." oninput="wc('v3','wc3',80)"></textarea><div class="wc" id="wc3">0 / 80 words</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(5)">← Back</button><button class="btn btn-p" onclick="validateEssays()">Review & Submit →</button></div>
+</div>
+
+<!-- STEP 7: Confirm & Submit -->
+<div class="step" id="s7">
+  <div class="card">
+    <div class="card-hd"><div class="tag">✅ Final Step</div><h2>Review & Submit</h2><p>Check your details below, then tap Submit.</p></div>
+    <div class="card-bd">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:var(--t50);border-radius:8px;padding:10px 12px"><div style="font-size:10px;font-weight:700;color:var(--t400);text-transform:uppercase;margin-bottom:3px">Name</div><div style="font-size:14px;font-weight:600;color:var(--t800)" id="rev-name">—</div></div>
+        <div style="background:var(--t50);border-radius:8px;padding:10px 12px"><div style="font-size:10px;font-weight:700;color:var(--t400);text-transform:uppercase;margin-bottom:3px">City</div><div style="font-size:14px;font-weight:600;color:var(--t800)" id="rev-city">—</div></div>
+        <div style="background:var(--t50);border-radius:8px;padding:10px 12px"><div style="font-size:10px;font-weight:700;color:var(--t400);text-transform:uppercase;margin-bottom:3px">School</div><div style="font-size:14px;font-weight:600;color:var(--t800)" id="rev-school">—</div></div>
+        <div style="background:var(--t50);border-radius:8px;padding:10px 12px"><div style="font-size:10px;font-weight:700;color:var(--t400);text-transform:uppercase;margin-bottom:3px">Matric</div><div style="font-size:14px;font-weight:600;color:var(--t800)" id="rev-marks">—</div></div>
+      </div>
+      <div style="background:var(--gl);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--g);font-weight:600;margin-bottom:12px">
+        ✅ SJT Answered: <span id="rev-sjt">0</span>/15 questions · SE Survey: <span id="rev-se">0</span>/5 questions
+      </div>
+      <div id="submit-err"></div>
+      <button class="btn btn-p btn-full" id="sub-btn" onclick="submitForm()">Submit Assessment →</button>
+    </div>
+  </div>
+  <div class="nav"><button class="btn btn-s" onclick="go(6)">← Back</button><div></div></div>
+</div>
+
+<!-- STEP 8: Loading -->
+<div class="step" id="s8">
+  <div class="card"><div class="card-bd">
+    <div class="loading"><div class="spin"></div><p>Submitting your assessment...<br>Please keep this screen open.</p></div>
+  </div></div>
+</div>
+
+<!-- STEP 9: Success -->
+<div class="step" id="s9">
+  <div class="card"><div class="card-bd">
+    <div class="conf">
+      <div class="ico">🎉</div>
+      <h2>Submitted Successfully!</h2>
+      <p>Your assessment has been recorded.</p>
+      <div class="ref" id="conf-ref"></div>
+      <p style="font-size:13px;color:var(--t500)">Please hand your phone to the volunteer or show them this screen. You may now close this page.</p>
+    </div>
+  </div></div>
+</div>
+
+<!-- STEP 10: No Internet Fallback -->
+<div class="step" id="s10">
+  <div class="card"><div class="card-bd">
+    <div class="conf">
+      <div class="ico">📋</div>
+      <h2>No Internet — Use Backup Code</h2>
+      <p>Your answers have been saved locally. Show this backup code to the volunteer — they can enter it manually.</p>
+      <div class="bkp">
+        <h4>Your Backup Code</h4>
+        <div class="bkp-code" id="backup-code">——</div>
+        <p style="font-size:12px;color:var(--am);margin-top:6px">Screenshot this page or write the code down.</p>
+      </div>
+      <p style="font-size:13px;color:var(--t500);margin-top:10px">Name: <b id="bc-name">—</b> · City: <b id="bc-city">—</b></p>
+    </div>
+  </div></div>
+</div>
+
+</div><!-- box -->
+
+<script>
+// ═══════════════════════════════════════════
+// PASTE YOUR GOOGLE APPS SCRIPT URL BELOW
+// (Instructions in volunteer_dashboard.html)
+// ═══════════════════════════════════════════
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby28lMA8ecWzXCJ_oF3nbOqy70p6ea7TfFuxfrVcqfmLvfmhtIo86m7ADpRGDjO2vPx/exec";
+// ── Already Submitted Check ──────────────────
+// ═══════════════════════════════════════════
+
+// ── Already Submitted Check ──────────────────
+(function(){
+  var prev = localStorage.getItem("shibli_submitted");
+  if(prev){
+    try{
+      var info = JSON.parse(prev);
+      document.body.innerHTML = '<div style="font-family:-apple-system,sans-serif;background:#edf4f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px"><div style="background:#fff;border-radius:16px;padding:36px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)"><div style="font-size:56px;margin-bottom:16px">&#x2705;</div><h2 style="font-size:20px;font-weight:800;color:#111827;margin-bottom:8px">Already Submitted</h2><p style="font-size:14px;color:#6b7280;line-height:1.6;margin-bottom:20px"><b>' + info.name + '</b>, your assessment has already been recorded. You cannot submit again.</p><div style="background:#e8f5ee;border-radius:10px;padding:14px;font-size:13px;color:#1a6b40;font-weight:600;margin-bottom:20px">Reference: ' + info.ref + '<br>SJT Score: ' + info.sjtScore + '/50</div><p style="font-size:12px;color:#9ca3af">Please hand your device to the volunteer or show them this screen.</p></div></div>';
+    }catch(e){}
+  }
+})();
+
+const SJT = [
+  {n:1,q:"آپ نے Biology کے امتحان کے لیے بہت محنت کی لیکن C گریڈ ملا۔ دوستوں نے کم محنت کر کے بہتر نتیجہ حاصل کیا۔ اگلا قدم کیا ہوگا؟",opts:[
+    {l:"A",t:"استاد سے پرچہ دیکھ کر ہر غلطی پہچانیں اور بہتری کا منصوبہ بنائیں۔",s:5},
+    {l:"B",t:"ایک دن مایوس رہیں، پھر اگلے امتحان کے لیے اور محنت کا عزم کریں۔",s:3},
+    {l:"C",t:"فیصلہ کریں کہ Biology میری طاقت نہیں اور دوسرے مضامین پر توجہ دیں۔",s:1}]},
+  {n:2,q:"ہاسٹل کی پہلی ماہانہ ٹیسٹ میں باقاعدہ پڑھنے کے باوجود فیل ہو گئے۔ والدین نے فون پر پوچھا — کیا کہیں گے؟",opts:[
+    {l:"A",t:"سچ بتائیں، کیا غلط ہوا سمجھائیں، اور بہتری کا منصوبہ شیئر کریں۔",s:5},
+    {l:"B",t:"کہیں کہ ٹھیک رہا اور خاموشی سے اگلی بار بہتر کرنے کی کوشش کریں۔",s:3},
+    {l:"C",t:"کہیں کہ استاد نے پرچہ بہت مشکل بنایا تھا، یہ آپ کی غلطی نہیں۔",s:1}]},
+  {n:3,q:"آپ نے ہفتوں ڈیبیٹ مقابلے کی تیاری کی مگر پہلے راؤنڈ میں باہر ہو گئے۔ اگلا دن کیسے گزاریں گے؟",opts:[
+    {l:"A",t:"جج سے مخصوص فیڈبیک لیں، نوٹ کریں، اور اگلے موقع کے لیے رجسٹر کریں۔",s:5},
+    {l:"B",t:"جذباتی طور پر سنبھلنے کے لیے دن لیں، پھر آگے بڑھیں۔",s:3},
+    {l:"C",t:"فیصلہ کریں مقابلے ناانصاف ہیں اور حصہ لینا چھوڑ دیں۔",s:1}]},
+  {n:4,q:"ہاسٹل کے پہلے مہینے محسوس ہوا کہ آپ کئی ہم جماعتوں سے تعلیمی طور پر پیچھے ہیں۔ کیا کریں گے؟",opts:[
+    {l:"A",t:"کمزور موضوعات پہچانیں، ریکوری پلان بنائیں، اور کسی سینئر سے مشورہ لیں۔",s:5},
+    {l:"B",t:"کم سونے کے باوجود لمبے گھنٹے پڑھ کر فرق کم کریں۔",s:3},
+    {l:"C",t:"خود کو بتائیں یہ adjustment کا وقت ہے اور خود بخود ٹھیک ہونے کی امید رکھیں۔",s:1}]},
+  {n:5,q:"ایک استاد نے پوری کلاس کے سامنے آپ کے کام پر تنقید کی اور کسی اور سے موازنہ کیا۔ آپ کیا کریں گے؟",opts:[
+    {l:"A",t:"توجہ سے سنیں، تنقید نوٹ کریں، پھر استاد سے علیحدگی میں بہتری کا طریقہ پوچھیں۔",s:5},
+    {l:"B",t:"شرمندگی محسوس کریں مگر اسے ذاتی حوصلے کے طور پر استعمال کریں۔",s:3},
+    {l:"C",t:"ناانصافی سمجھیں اور اس مضمون میں دلچسپی کم ہو جائے۔",s:1}]},
+  {n:6,q:"رات 10 بجے ہیں۔ 2 گھنٹے پڑھنے کا منصوبہ تھا۔ '5 منٹ' کے لیے فون اٹھایا اور گھنٹہ گزر گیا۔ اب کیا کریں گے؟",opts:[
+    {l:"A",t:"فون دوسرے کمرے میں رکھیں اور بچا ہوا گھنٹہ پوری توجہ سے پڑھیں۔",s:5},
+    {l:"B",t:"گناہگار محسوس کریں، پڑھنے کی کوشش کریں مگر توجہ بٹتی رہے۔",s:3},
+    {l:"C",t:"سوچیں سیشن برباد ہو گیا اور جلدی سو جائیں۔",s:1}]},
+  {n:7,q:"دوست باہر کرکٹ کھیل رہے ہیں۔ آپ کو ایک اہم باب ختم کرنا ہے۔ کیا فیصلہ کریں گے؟",opts:[
+    {l:"A",t:"پہلے باب ختم کریں (چاہے 90 منٹ لگیں)، پھر جتنا وقت بچے کھیلیں۔",s:5},
+    {l:"B",t:"30 منٹ وقفے کے طور پر کھیلیں، پھر واپس آ کر پڑھیں۔",s:3},
+    {l:"C",t:"یہ سوچ کر چلے جائیں کہ رات کو پڑھیں گے، حالانکہ جانتے ہیں نیند آ جاتی ہے۔",s:1}]},
+  {n:8,q:"ایک ہفتے میں تین مضامین کے تین کام جمع کرانے ہیں۔ کیسے منصوبہ بنائیں گے؟",opts:[
+    {l:"A",t:"ہر کام کو روزانہ کی ذمہ داریوں میں تقسیم کریں اور پیش رفت ٹریک کریں۔",s:5},
+    {l:"B",t:"آسان سے شروع کریں تاکہ حوصلہ ملے، پھر مشکل کی طرف جائیں۔",s:3},
+    {l:"C",t:"ہر کام ڈیڈ لائن کی آخری رات شروع کریں — دباؤ میں بہتر کام آتا ہے۔",s:1}]},
+  {n:9,q:"پڑھنے کے دوران YouTube پر اپنے مضمون سے متعلق دلچسپ ویڈیو آ گئی۔ کیا کریں گے؟",opts:[
+    {l:"A",t:"'بعد میں دیکھنا' میں محفوظ کریں اور فوراً کتاب کی طرف واپس آئیں۔",s:5},
+    {l:"B",t:"5-10 منٹ دیکھیں کیونکہ تعلیمی ہے، پھر پڑھائی پر واپس آئیں۔",s:3},
+    {l:"C",t:"پوری دیکھیں — تعلیمی مواد ہے تو پڑھائی ہی سمجھیں۔",s:1}]},
+  {n:10,q:"آپ نے دو ہفتوں سے مشکل Maths کا باب ٹالا ہوا ہے۔ امتحان قریب ہیں۔ پہلا قدم کیا ہوگا؟",opts:[
+    {l:"A",t:"ابھی باب کھولیں، ایک صفحہ پڑھیں، اور روزانہ کا شیڈول بنائیں۔",s:5},
+    {l:"B",t:"آج رات YouTube پر explanation دیکھیں تاکہ کم ڈراؤنا لگے۔",s:3},
+    {l:"C",t:"مضبوط مضامین پر توجہ دیں اور امید رکھیں Maths کم آئے۔",s:1}]},
+  {n:11,q:"گروپ اسٹڈی میں بات مذاق کی طرف مڑ گئی۔ آپ بھی لطف اٹھا رہے ہیں لیکن مواد ابھی باقی ہے۔ کیا کریں گے؟",opts:[
+    {l:"A",t:"تھوڑا لطف اٹھائیں، پھر خوشی سے واپس لائیں — 'چلو یار، دس منٹ اور پھر واپس!'",s:5},
+    {l:"B",t:"خاموشی سے چلے جائیں اور اکیلے پڑھیں۔",s:3},
+    {l:"C",t:"بیٹھے رہیں لیکن پریشان ہوں اور کچھ نہ کہیں۔",s:1}]},
+  {n:12,q:"بڑے امتحان سے ایک رات پہلے پریشانی سے توجہ نہیں لگ رہی۔ کیا کریں گے؟",opts:[
+    {l:"A",t:"پریشانی کو فطری سمجھیں، دعا / سانس کا معمول کریں، 45 منٹ اہم نوٹس دیکھیں، پھر جلدی سو جائیں۔",s:5},
+    {l:"B",t:"چائے پئیں، جتنا تھکاوٹ اجازت دے پڑھتے رہیں، جب نیند آئے سو جائیں۔",s:3},
+    {l:"C",t:"سمجھیں کافی پڑھ لیا ہے اور فون پر ہلکی چیز دیکھ کر ذہن ہلکا کریں۔",s:1}]},
+  {n:13,q:"ایک mentor نے براہِ راست کہا کہ آپ کی essay writing کمزور ہے۔ دل کو چوٹ لگی۔ اگلا قدم کیا ہوگا؟",opts:[
+    {l:"A",t:"دل سے شکریہ ادا کریں، مخصوص مثالیں مانگیں، اور اسی شام دوبارہ لکھیں۔",s:5},
+    {l:"B",t:"خاموشی سے قبول کریں مگر حوصلہ ٹوٹنے سے فوراً عمل نہ کر سکیں۔",s:3},
+    {l:"C",t:"محسوس کریں mentor نے محنت کی قدر نہیں کی اور بغیر تبدیلی آگے بڑھیں۔",s:1}]},
+  {n:14,q:"orientation میں گروپ سرگرمی کے دوران آپ دوسروں سے پیچھے ہیں۔ آپ کا رویہ کیا ہوگا؟",opts:[
+    {l:"A",t:"مصروف رہیں، مختلف طریقے آزمائیں، اپنی غلطیوں پر ہنسیں، اور بہتر لوگوں سے مشورہ لیں۔",s:5},
+    {l:"B",t:"خاموشی سے کوشش کرتے رہیں مگر دیکھے جانے سے خود آگاہی ہو۔",s:3},
+    {l:"C",t:"نالائق نہ لگنے کے لیے سرگرمی سے الگ ہو جائیں۔",s:1}]},
+  {n:15,q:"ٹیسٹ اور انٹرویوز کا تھکا دینے والا دن گزرا۔ شام کو discussion session ہے۔ آپ واقعی تھکے ہوئے ہیں۔ کیا کریں گے؟",opts:[
+    {l:"A",t:"پوری توجہ سے شرکت کریں — یہ نمبروں سے پرے خود کو دکھانے کا موقع ہے — اور کم از کم ایک بات کریں۔",s:5},
+    {l:"B",t:"شرکت کریں مگر خاموش رہیں — تھکاوٹ میں معیار گر سکتا ہے۔",s:3},
+    {l:"C",t:"پوچھیں حاضری لازمی ہے یا نہیں، اور صرف ضروری ہو تو جائیں۔",s:1}]}
+];
+
+const SE = [
+  {n:1,q:"آپ کے گھر میں کتنے افراد رہتے ہیں؟",opts:[
+    {t:"2 سے 4 افراد",s:0},{t:"5 سے 7 افراد",s:1},{t:"8 سے 10 افراد",s:2},{t:"10 سے زیادہ",s:3}]},
+  {n:2,q:"والد / سرپرست کا بنیادی پیشہ:",opts:[
+    {t:"سرکاری یا نجی ملازمت",s:0},{t:"چھوٹا کاروبار / خود روزگار",s:1},
+    {t:"روزانہ مزدوری / کاشتکاری",s:2},{t:"ریٹائرڈ، بے روزگار، یا وفات پا گئے",s:3}]},
+  {n:3,q:"گھر کی تقریباً ماہانہ آمدنی:",opts:[
+    {t:"ایک لاکھ روپے سے زیادہ",s:0},{t:"50,000 سے 1,00,000 روپے",s:1},
+    {t:"25,000 سے 50,000 روپے",s:2},{t:"25,000 روپے سے کم",s:3}]},
+  {n:4,q:"آج آپ یہاں کیسے آئے؟",opts:[
+    {t:"اپنی / خاندانی گاڑی",s:0},{t:"پبلک ٹرانسپورٹ (بس/ویگن/میٹرو)",s:1},
+    {t:"کسی دوسرے شہر سے رات گزار کر آئے",s:3},{t:"رکشہ یا موٹرسائیکل",s:1}]},
+  {n:5,q:"کیا آپ اپنے خاندان میں میٹرک سے آگے پڑھنے والوں میں سے پہلے ہیں؟",opts:[
+    {t:"نہیں — کئی خاندان والوں نے کالج/یونیورسٹی میں پڑھا ہے",s:0},
+    {t:"ایک یا دو نے میٹرک سے آگے پڑھا ہے",s:1},
+    {t:"ہاں — میں پہلوں میں سے ہوں",s:2},
+    {t:"ہاں — پورے خاندان میں پہلا",s:3}]}
+];
+
+
+const IQ = [
+  {n:1,q:"اس سلسلے میں اگلا نمبر کیا ہوگا؟   2، 4، 8، 16، ___",opts:[
+    {l:"A",t:"24",s:0},{l:"B",t:"32",s:4},{l:"C",t:"20",s:0},{l:"D",t:"18",s:0}]},
+  {n:2,q:"قلم کا کاغذ سے وہی تعلق ہے جو برش کا ___ سے ہے۔",opts:[
+    {l:"A",t:"پانی",s:0},{l:"B",t:"رنگ",s:4},{l:"C",t:"کمرہ",s:0},{l:"D",t:"درخت",s:0}]},
+  {n:3,q:"ان میں سے کون سا مختلف ہے؟   گائے، بکری، بھینس، شیر، اونٹ",opts:[
+    {l:"A",t:"گائے",s:0},{l:"B",t:"اونٹ",s:0},{l:"C",t:"شیر",s:4},{l:"D",t:"بھینس",s:0}]},
+  {n:4,q:"اگر تمام بلیاں جانور ہیں اور کچھ جانور سفید ہیں، تو:",opts:[
+    {l:"A",t:"تمام بلیاں سفید ہیں",s:0},{l:"B",t:"کوئی بلی سفید نہیں",s:0},
+    {l:"C",t:"کچھ بلیاں سفید ہو سکتی ہیں",s:4},{l:"D",t:"بلیاں جانور نہیں",s:0}]},
+  {n:5,q:"1، 1، 2، 3، 5، 8، ___ — اگلا نمبر کیا ہوگا؟",opts:[
+    {l:"A",t:"10",s:0},{l:"B",t:"11",s:0},{l:"C",t:"12",s:0},{l:"D",t:"13",s:4}]},
+  {n:6,q:"A، C، E، G، ___ — اگلا حرف کیا ہوگا؟",opts:[
+    {l:"A",t:"H",s:0},{l:"B",t:"I",s:4},{l:"C",t:"J",s:0},{l:"D",t:"K",s:0}]},
+  {n:7,q:"ایک دکاندار نے 100 روپے میں چیز خریدی اور 130 روپے میں بیچی۔ فائدہ کتنے فیصد ہے؟",opts:[
+    {l:"A",t:"20%",s:0},{l:"B",t:"13%",s:0},{l:"C",t:"30%",s:4},{l:"D",t:"25%",s:0}]},
+  {n:8,q:"ایک گاؤں میں بارش نہ ہو تو سب سے پہلے کیا ہوگا؟",opts:[
+    {l:"A",t:"لوگ شہر چلے جائیں گے",s:0},{l:"B",t:"فصلیں خراب ہوں گی",s:4},
+    {l:"C",t:"اسکول بند ہوں گے",s:0},{l:"D",t:"بجلی نہیں آئے گی",s:0}]},
+  {n:9,q:"ان میں سے کون سا گروپ درست ہے؟",opts:[
+    {l:"A",t:"سیب، آم، گاجر، انگور",s:0},{l:"B",t:"لاہور، کراچی، کوئٹہ، پشاور",s:4},
+    {l:"C",t:"کتاب، قلم، میز، پرندہ",s:0},{l:"D",t:"سورج، چاند، ستارہ، پانی",s:0}]},
+  {n:10,q:"احمد کے پاس 500 روپے ہیں۔ اس نے 120 روپے کی کتاب اور 80 روپے کا قلم خریدا۔ اس کے پاس کتنے روپے بچے؟",opts:[
+    {l:"A",t:"200 روپے",s:0},{l:"B",t:"280 روپے",s:0},{l:"C",t:"300 روپے",s:4},{l:"D",t:"320 روپے",s:0}]}
+];
+
+// Build SJT questions
+function buildSJT(qs,containerId){
+  const c=document.getElementById(containerId);
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div');
+    d.className='q-wrap';
+    d.innerHTML=`<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
+    <div class="opts">${q.opts.map((o,oi)=>`<div class="opt" id="o_${q.n}_${oi}" onclick="selOpt(${q.n},${oi},${o.s})">
+      <div class="opt-l">${o.l}</div><div class="opt-t urdu">${o.t}</div></div>`).join('')}</div>`;
+    c.appendChild(d);
+  });
+}
+buildSJT(SJT.slice(0,5),'sjt1-body');
+buildSJT(SJT.slice(5,10),'sjt2-body');
+buildSJT(SJT.slice(10,15),'sjt3-body');
+
+// Build SE
+const seBody=document.getElementById('se-body');
+SE.forEach((q,qi)=>{
+  const d=document.createElement('div');
+  d.className='q-wrap';
+  d.innerHTML=`<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
+  <div class="se-opts">${q.opts.map((o,oi)=>`<div class="se-opt urdu" id="se_${qi}_${oi}" onclick="selSE(${qi},${oi},${o.s})">
+    <div class="se-dot">${String.fromCharCode(65+oi)}</div>${o.t}</div>`).join('')}</div>`;
+  seBody.appendChild(d);
+});
+
+
+// Build IQ questions
+const iqBody = document.getElementById('iq-body');
+IQ.forEach((q) => {
+  const d = document.createElement('div');
+  d.className = 'q-wrap';
+  d.innerHTML = `<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
+  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi},${o.s})">
+    <div class="opt-l">${o.l}</div><div class="opt-t urdu">${o.t}</div></div>`).join('')}</div>`;
+  iqBody.appendChild(d);
+});
+
+// Answer storage
+const answers={sjt:{},se:{},iq:{}};
+function selOpt(qn,oi,score){
+  const q=SJT.find(x=>x.n===qn);
+  q.opts.forEach((_,j)=>document.getElementById(`o_${qn}_${j}`).classList.remove('sel'));
+  document.getElementById(`o_${qn}_${oi}`).classList.add('sel');
+  answers.sjt[qn]=score;
+}
+
+function selIQ(qn,oi,score){
+  IQ.find(x=>x.n===qn).opts.forEach((_,j)=>document.getElementById(`iq_${qn}_${j}`).classList.remove('sel'));
+  document.getElementById(`iq_${qn}_${oi}`).classList.add('sel');
+  answers.iq[qn]=score;
+}
+
+function selSE(qi,oi,score){
+  SE[qi].opts.forEach((_,j)=>document.getElementById(`se_${qi}_${j}`).classList.remove('sel'));
+  document.getElementById(`se_${qi}_${oi}`).classList.add('sel');
+  answers.se[qi]=score;
+}
+
+// Word count
+function wc(id,wcId,max){
+  const t=document.getElementById(id).value.trim();
+  const w=t?t.split(/\s+/).length:0;
+  const el=document.getElementById(wcId);
+  el.textContent=`${w} / ${max} words`;
+  el.style.color=w>max?'var(--rd)':w>=max*.8?'var(--g)':'var(--t400)';
+}
+
+// Step navigation
+let cur=0;
+const pcts=[12,25,37,50,62,75,87,100,100,100];
+const labels=['Step 1 of 8','Step 2 of 7','Step 3 of 7','Step 4 of 7','Step 5 of 7','Step 6 of 7','Step 7 of 7','Submitting...','Done','Done'];
+function go(n){
+  if(n===6){
+    document.getElementById('rev-name').textContent=document.getElementById('name').value||'—';
+    document.getElementById('rev-city').textContent=document.getElementById('city').value||'—';
+    document.getElementById('rev-school').textContent=document.getElementById('school').value||'—';
+    document.getElementById('rev-marks').textContent=document.getElementById('marks').value||'—';
+    document.getElementById('rev-sjt').textContent=Object.keys(answers.sjt).length;
+    document.getElementById('rev-se').textContent=Object.keys(answers.se).length;
+  }
+  document.getElementById(`s${cur}`).classList.remove('on');
+  document.getElementById(`s${n}`).classList.add('on');
+  cur=n;
+  document.getElementById('prog').style.width=pcts[n]+'%';
+  document.getElementById('prog-label').textContent=labels[n];
+  document.getElementById('prog-pct').textContent=pcts[n]+'%';
+  window.scrollTo(0,0);
+}
+
+// Calculate SJT + SE scores
+function calcScores(){
+  const sjtRaw=Object.values(answers.sjt).reduce((a,b)=>a+b,0);
+  const sjtScore=Math.round(sjtRaw/75*50);
+  const seRaw=Object.values(answers.se).reduce((a,b)=>a+b,0);
+  const seScore=Math.round(seRaw/12*5);
+  return{sjtRaw,sjtScore,seRaw,seScore};
+}
+
+// Generate backup code (15 SJT scores + 5 SE scores as compact string)
+function genBackupCode(){
+  let code='';
+  SJT.forEach(q=>{code+=(answers.sjt[q.n]||0);});
+  SE.forEach((_,i)=>{code+=(answers.se[i]||0);});
+  return code;
+}
+
+
+function validateEssays(){
+  const v1 = document.getElementById('v1').value.trim();
+  const v2 = document.getElementById('v2').value.trim();
+  const v3 = document.getElementById('v3').value.trim();
+  if(!v1 || v1.split(/\s+/).length < 5){
+    alert('Please write at least 5 words for Essay 1.');return;
+  }
+  if(!v2 || v2.split(/\s+/).length < 5){
+    alert('Please write at least 5 words for Essay 2.');return;
+  }
+  if(!v3 || v3.split(/\s+/).length < 5){
+    alert('Please write at least 5 words for Essay 3.');return;
+  }
+  go(7);
+}
+
+async function submitForm(){
+  const name=document.getElementById('name').value.trim();
+  if(!name){document.getElementById('submit-err').innerHTML='<div class="err-box">Please go back and enter your name.</div>';return;}
+  
+  go(8);
+  const scores=calcScores();
+  const iqScore=Object.values(answers.iq).reduce((a,b)=>a+b,0);
+  const payload={
+    action:'submit',
+    name,father:document.getElementById('father').value,
+    city:document.getElementById('city').value,
+    school:document.getElementById('school').value,
+    phone:document.getElementById('phone').value,
+    marks:document.getElementById('marks').value,
+    sjtAnswers:SJT.map(q=>answers.sjt[q.n]||0),
+    iqAnswers:IQ.map(q=>answers.iq[q.n]||0),
+    iqScore,
+    sjtScore:scores.sjtScore,
+    seAnswers:SE.map((_,i)=>answers.se[i]||0),
+    seScore:scores.seScore,
+    vision1:document.getElementById('v1').value,
+    vision2:document.getElementById('v2').value,
+    vision3:document.getElementById('v3').value,
+    timestamp:new Date().toISOString(),
+    backupCode:genBackupCode()
+  };
+
+  if(false){
+    // Demo mode
+    go(8);
+    document.getElementById('conf-ref').textContent=`✅ ${name} · SJT Score: ${scores.sjtScore}/50 · SE Score: ${scores.seScore}/5`;
+    return;
+  }
+
+  try{
+    const res=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.success){
+      go(9);
+      document.getElementById('conf-ref').textContent=`✅ ${name} · Reference: ${data.rowId||'Saved'} · SJT Score: ${scores.sjtScore}/50`;
+      localStorage.setItem('shibli_submitted', JSON.stringify({name:name, ref:data.rowId||'Saved', sjtScore:scores.sjtScore}));
+    } else {throw new Error('Server error');}
+  } catch(e){
+    go(10);
+    document.getElementById('backup-code').textContent=genBackupCode();
+    document.getElementById('bc-name').textContent=name;
+    document.getElementById('bc-city').textContent=document.getElementById('city').value;
+  }
+}
+</script>
+</body>
+</html>
