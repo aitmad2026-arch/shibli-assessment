@@ -645,9 +645,10 @@ const iqBody = document.getElementById('iq-body');
 IQ.forEach((q) => {
   const d = document.createElement('div');
   d.className = 'q-wrap';
+  const labels = ['A','B','C','D'];
   d.innerHTML = `<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
-  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi},${o.s})">
-    <div class="opt-l">${o.l}</div><div class="opt-t urdu">${o.t}</div></div>`).join('')}</div>`;
+  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi})">
+    <div class="opt-l">${labels[oi]}</div><div class="opt-t urdu">${o}</div></div>`).join('')}</div>`;
   iqBody.appendChild(d);
 });
 
