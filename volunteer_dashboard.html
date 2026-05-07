@@ -628,10 +628,11 @@ function calcAll(id){
   const st = allStudents.find(s=>s.id===id)||{};
   const acad = getAcadScore(id);
   const obs = getObsScore(id);
-  const iqVol = getScore(id,'iq');
-  const psych = getScore(id,'psych');
-  const pers = getScore(id,'pers');
-  const vis = getScore(id,'vision');
+  // Auto scores
+  const iqVol = st.iqScore||0;
+  const psych = st.sjtScore||0;
+  const pers = calcPersScore(st);
+  const vis = calcVisionScore(st);
 
   // Normalize volunteer scores (1-7) to point contributions
   // IQ vol score → /7 contribution (max 7)
@@ -639,9 +640,10 @@ function calcAll(id){
   // Total = SJT/50 + Acad/40 + obs/10 + need/5 + iqVol*1 + psych*1 + pers*1 + vis*1 = /115 normalized to /100
   const sjt = st.sjtScore||0;
   const need = st.seScore||0;
-  const raw = acad !== null ? sjt + (acad||0) + obs + need + iqVol + psych + pers + vis : null;
-  // Normalize: max possible = 50+40+10+5+7+7+7+7 = 133 → scale to 100
-  const total = raw !== null ? Math.round(raw/133*100) : null;
+  // Auto score formula: IQ/40 + SJT/50 + Acad/40 + Obs/10 + Need/5 + Pers/7 + Vision/7
+  // Max = 40+50+40+10+5+7+7 = 159 → scale to 100
+  const raw = acad !== null ? iqVol + psych + (acad||0) + obs + need + pers + vis : null;
+  const total = raw !== null ? Math.round(raw/159*100) : null;
 
   const set = (eid,v)=>{ const e=document.getElementById(eid); if(e) e.textContent=v; };
   set(`ashow_${id}`, acad!==null?acad:'—');
@@ -721,10 +723,10 @@ async function saveCurrent(){
   const tot = parseFloat(document.getElementById(`at_${id}`)?.value)||1100;
   const acadScore = got ? Math.round(got/tot*40) : 0;
   const obsScore = getObsScore(id);
-  const volIqScore = getScore(id,'iq');
-  const volPsychScore = getScore(id,'psych');
-  const volPersScore = getScore(id,'pers');
-  const volVisionScore = getScore(id,'vision');
+  const volIqScore = st.iqScore||0;
+  const volPsychScore = st.sjtScore||0;
+  const volPersScore = calcPersScore(st);
+  const volVisionScore = calcVisionScore(st);
   const volComment = document.getElementById(`vc_${id}`)?.value||'';
   const volRec = recValues[id]||'';
   const sjt = st.sjtScore||0;

@@ -641,15 +641,48 @@ SE.forEach((q,qi)=>{
 
 
 // Build IQ questions
+window._iqAnswers = {};
 const iqBody = document.getElementById('iq-body');
 IQ.forEach((q) => {
   const d = document.createElement('div');
   d.className = 'q-wrap';
-  d.innerHTML = `<div class="q-top"><div class="q-num">Q${q.n}</div><div class="q-txt urdu">${q.q}</div></div>
-  <div class="opts">${q.opts.map((o,oi) => `<div class="opt" id="iq_${q.n}_${oi}" onclick="selIQ(${q.n},${oi})">
-    <div class="opt-l">${o.l}</div><div class="opt-t urdu">${o.t}</div></div>`).join('')}</div>`;
+  let optsHtml = '';
+  q.opts.forEach((o, oi) => {
+    optsHtml += '<div class="opt" id="iq_'+q.n+'_'+oi+'" onclick="selIQ('+q.n+','+oi+')">';
+    optsHtml += '<div class="opt-l">'+o.l+'</div>';
+    optsHtml += '<div class="opt-t urdu">'+o.t+'</div>';
+    optsHtml += '</div>';
+  });
+  d.innerHTML = '<div class="q-top"><div class="q-num">Q'+q.n+'</div><div class="q-txt urdu">'+q.q+'</div></div><div class="opts">'+optsHtml+'</div>';
   iqBody.appendChild(d);
 });
+
+function selIQ(qn, oi) {
+  const q = IQ.find(function(x){ return x.n === qn; });
+  if (!q) return;
+  const score = q.opts[oi].s;
+  const correctIdx = q.opts.findIndex(function(o){ return o.s === 4; });
+  // Reset styles
+  for (let j = 0; j < q.opts.length; j++) {
+    const el = document.getElementById('iq_' + qn + '_' + j);
+    if (el) { el.classList.remove('sel'); el.style.background = ''; el.style.borderColor = ''; }
+  }
+  // Highlight chosen
+  const chosen = document.getElementById('iq_' + qn + '_' + oi);
+  if (chosen) {
+    chosen.classList.add('sel');
+    chosen.style.background = score === 4 ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.06)';
+    chosen.style.borderColor = score === 4 ? 'var(--emerald)' : 'var(--rd)';
+  }
+  // Highlight correct if wrong
+  if (score !== 4 && correctIdx >= 0) {
+    const cel = document.getElementById('iq_' + qn + '_' + correctIdx);
+    if (cel) { cel.style.borderColor = 'var(--emerald)'; cel.style.background = 'rgba(5,150,105,0.06)'; }
+  }
+  // Store answer
+  window._iqAnswers[qn] = score;
+  console.log('IQ Q'+qn+' answered, score='+score+', total answers:', window._iqAnswers);
+}
 
 // Answer storage
 const answers={sjt:{},se:{},iq:{}};
@@ -660,30 +693,6 @@ function selOpt(qn,oi,score){
   answers.sjt[qn]=score;
 }
 
-function selIQ(qn,oi){
-  const q = IQ.find(x=>x.n===qn);
-  if(!q) return;
-  const score = q.opts[oi] ? q.opts[oi].s : 0;
-  const correctIdx = q.opts.findIndex(o=>o.s===4);
-  // Reset all options
-  q.opts.forEach((_,j)=>{
-    const el=document.getElementById('iq_'+qn+'_'+j);
-    if(el){el.classList.remove('sel');el.style.background='';el.style.borderColor='';}
-  });
-  // Highlight chosen
-  const el=document.getElementById('iq_'+qn+'_'+oi);
-  if(el){
-    el.classList.add('sel');
-    el.style.background = score===4?'rgba(5,150,105,0.08)':'rgba(220,38,38,0.06)';
-    el.style.borderColor = score===4?'var(--emerald)':'var(--rd)';
-  }
-  // Show correct if wrong
-  if(score!==4 && correctIdx>=0){
-    const cel=document.getElementById('iq_'+qn+'_'+correctIdx);
-    if(cel){cel.style.borderColor='var(--emerald)';cel.style.background='rgba(5,150,105,0.06)';}
-  }
-  answers.iq[qn]=score;
-}
 
 function selSE(qi,oi,score){
   SE[qi].opts.forEach((_,j)=>document.getElementById(`se_${qi}_${j}`).classList.remove('sel'));
@@ -762,7 +771,7 @@ async function submitForm(){
   
   go(8);
   const scores=calcScores();
-  const iqScore=Object.values(answers.iq).reduce((a,b)=>a+b,0);
+  const iqScore=Object.values(window._iqAnswers||{}).reduce(function(a,b){return a+b;},0);
   const payload={
     action:'submit',
     name,father:document.getElementById('father').value,
@@ -771,7 +780,7 @@ async function submitForm(){
     phone:document.getElementById('phone').value,
     marks:document.getElementById('marks').value,
     sjtAnswers:SJT.map(q=>answers.sjt[q.n]||0),
-    iqAnswers:IQ.map(q=>answers.iq[q.n]||0),
+    iqAnswers:IQ.map(function(q){return window._iqAnswers[q.n]||0;}),
     iqScore,
     sjtScore:scores.sjtScore,
     seAnswers:SE.map((_,i)=>answers.se[i]||0),
