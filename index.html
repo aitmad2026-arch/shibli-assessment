@@ -660,10 +660,29 @@ function selOpt(qn,oi,score){
   answers.sjt[qn]=score;
 }
 
-function selIQ(qn,oi,score){
-  IQ.find(x=>x.n===qn).opts.forEach((_,j)=>document.getElementById(`iq_${qn}_${j}`).classList.remove('sel'));
-  document.getElementById(`iq_${qn}_${oi}`).classList.add('sel');
-  answers.iq[qn]=score;
+function selIQ(qn,oi){
+  const q = IQ.find(x=>x.n===qn);
+  q.opts.forEach((_,j)=>{
+    const el = document.getElementById(`iq_${qn}_${j}`);
+    if(el){
+      el.classList.remove('sel');
+      el.style.background='';
+      el.style.borderColor='';
+    }
+  });
+  const chosen = document.getElementById(`iq_${qn}_${oi}`);
+  if(chosen){
+    const isCorrect = oi === q.correct;
+    chosen.classList.add('sel');
+    chosen.style.background = isCorrect ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.06)';
+    chosen.style.borderColor = isCorrect ? 'var(--emerald)' : 'var(--rd)';
+    // Show correct answer if wrong
+    if(!isCorrect){
+      const correctEl = document.getElementById(`iq_${qn}_${q.correct}`);
+      if(correctEl){ correctEl.style.borderColor='var(--emerald)'; correctEl.style.background='rgba(5,150,105,0.06)'; }
+    }
+  }
+  answers.iq[qn] = oi === q.correct ? 4 : 0;
 }
 
 function selSE(qi,oi,score){
