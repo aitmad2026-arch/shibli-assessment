@@ -210,22 +210,18 @@ function buildExpandContent(st, section){
   if(section === 'iq'){
     const answers = st.iqAnswers || [];
     return IQ_QUESTIONS.map((q,i)=>{
-      const chosen = answers[i] !== undefined ? answers[i] : -1;
-      const isCorrect = (chosen === q.correct * 4); // score 4 = correct
-      const chosenIdx = chosen === 4 ? q.correct : (chosen === 0 ? -1 : -1);
-      // Find which option was chosen based on score
-      let chosenText = 'Not answered';
-      let ansClass = 'ans-neutral';
-      if(chosen === 4){ chosenText = q.opts[q.correct]; ansClass='ans-correct'; }
-      else if(chosen === 0 && answers[i] !== undefined){
-        // Wrong answer chosen - we don't know which one, just show wrong
-        chosenText = 'Wrong answer chosen';
-        ansClass = 'ans-wrong';
-      }
+      const score = parseInt(answers[i]) || 0;
+      const isCorrect = score === 4;
+      const notAnswered = answers[i] === undefined || answers[i] === null || answers[i] === '';
+      const ansClass = notAnswered ? 'ans-neutral' : isCorrect ? 'ans-correct' : 'ans-wrong';
+      const ansLabel = notAnswered ? '— Not answered' : isCorrect ? '✅ Correct' : '❌ Wrong';
+      const correctText = q.opts[q.correct] || '';
       return `<div class="expand-q">
         <div class="expand-q-txt">${i+1}. ${q.q}</div>
-        <span class="expand-ans ${ansClass}">${chosen===4?'✅':'❌'} ${chosenText}</span>
-        <span style="font-size:11px;color:var(--t400);margin-left:8px">Correct: ${q.opts[q.correct]}</span>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <span class="expand-ans ${ansClass}">${ansLabel}</span>
+          <span style="font-size:11px;color:var(--emerald-600);font-weight:700;background:var(--emerald-50);padding:3px 9px;border-radius:6px;border:1px solid rgba(5,150,105,0.15)">✓ Correct answer: ${correctText}</span>
+        </div>
       </div>`;
     }).join('');
   }
